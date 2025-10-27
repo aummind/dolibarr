@@ -1,3 +1,8 @@
+Backup of docker-compose.yml before HTTPS changes.
+
+---
+
+```
 services:
   web:
     image: nginx:stable-alpine
@@ -39,3 +44,4 @@ services:
 volumes:
   mariadb_data:
   dolibarr_documents:
+```

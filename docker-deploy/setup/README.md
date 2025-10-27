@@ -107,3 +107,46 @@ docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml ps
 ---
 
 For detailed information on any component, see the individual documentation files listed above.
+
+## Automated HTTPS with Let’s Encrypt (nginx-proxy)
+
+This section explains how to enable secure HTTPS for your Dolibarr Docker stack using automated, production-grade certificates from Let’s Encrypt with `nginx-proxy` and `docker-letsencrypt-nginx-proxy-companion`.
+
+### Prerequisites
+- You must have a real domain name pointing to your server’s public IP.
+- Ports 80 and 443 must be open and accessible from the internet.
+
+### Steps
+
+1. **Update `docker-compose.yml`**
+   - Add the `nginx-proxy` and `letsencrypt` services as shown in the sample compose file.
+   - In your `app` service, set these environment variables:
+     - `VIRTUAL_HOST=your.domain.com`
+     - `LETSENCRYPT_HOST=your.domain.com`
+     - `LETSENCRYPT_EMAIL=your@email.com`
+   - Replace with your actual domain and email.
+
+2. **Start the stack**
+   ```bash
+   docker compose up -d
+   ```
+   This launches the proxy, companion, app, and db. The proxy will request and install a Let’s Encrypt certificate for your domain automatically.
+
+3. **Check certificate issuance logs**
+   ```bash
+   docker logs nginx-letsencrypt
+   ```
+   You should see messages about certificate creation and renewal.
+
+4. **Verify HTTPS**
+   - Visit `https://your.domain.com` in your browser. You should see a valid SSL certificate (no warnings).
+
+5. **Automatic Renewal**
+   - The companion container will keep your certificates up to date automatically.
+
+#### Notes
+- If you need to support multiple domains, add them (comma-separated) to `VIRTUAL_HOST` and `LETSENCRYPT_HOST`.
+- The proxy auto-generates Nginx config; you do not need a custom `nginx.conf`.
+- For troubleshooting, see [06-troubleshooting.md](06-troubleshooting.md).
+
+---

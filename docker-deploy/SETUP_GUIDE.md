@@ -30,6 +30,166 @@ docker-deploy/
 └── documents/            # Document storage (writable, Docker volume)
 ```
 
+## Quick Start Commands
+
+### Starting the Containers
+```bash
+# Navigate to docker-deploy directory
+cd /workspaces/dolibarr/docker-deploy
+
+# Start all services
+docker compose up -d
+
+# Or using full path from anywhere
+docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml up -d
+```
+
+### Checking Container Status
+```bash
+docker compose ps
+```
+
+### Viewing Logs
+```bash
+# All services
+docker compose logs -f
+
+# Specific service
+docker compose logs -f app
+docker compose logs -f web
+docker compose logs -f db
+```
+
+### Stopping Containers
+```bash
+docker compose down              # Keep data
+docker compose down -v           # Remove all data (careful!)
+```
+
+### Restarting After Codespace Resume
+When your Codespace restarts or resumes from pause, containers will be stopped. Simply run:
+```bash
+cd /workspaces/dolibarr/docker-deploy
+docker compose up -d
+```
+
+## Understanding Docker Compose Commands
+
+Docker Compose has different commands for managing containers. Here's when to use each:
+
+### Starting/Restarting Commands
+
+#### `docker compose up -d`
+**When to use**: First start OR after containers have been stopped/removed
+**What it does**: 
+- Creates containers if they don't exist
+- Starts stopped containers
+- Recreates containers if configuration changed
+**Example**:
+```bash
+docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml up -d
+```
+
+#### `docker compose start`
+**When to use**: When containers exist but are stopped
+**What it does**: 
+- Only starts existing stopped containers
+- Faster than `up` but doesn't recreate or update containers
+**Example**:
+```bash
+docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml start
+```
+
+#### `docker compose restart`
+**When to use**: Quick restart without stopping/removing containers
+**What it does**: 
+- Restarts running containers in place
+- Useful for applying PHP configuration changes
+**Example**:
+```bash
+docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml restart
+```
+
+### Stopping Commands
+
+#### `docker compose stop`
+**When to use**: Temporarily stop services (keeps containers)
+**What it does**: 
+- Stops containers but doesn't remove them
+- Data and state preserved
+- Fast to start again with `docker compose start`
+**Example**:
+```bash
+docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml stop
+```
+
+#### `docker compose down`
+**When to use**: Stop and clean up (for rebuild or Codespace shutdown)
+**What it does**: 
+- Stops AND removes containers
+- Removes networks
+- Keeps volumes (data persists)
+- Use `up -d` to start again
+**Example**:
+```bash
+docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml down
+```
+
+#### `docker compose down -v`
+**⚠️ CAUTION**: This deletes ALL data!
+**When to use**: Complete reset (fresh install)
+**What it does**: 
+- Stops and removes containers
+- Removes volumes (deletes database and documents!)
+- Only use for clean slate
+**Example**:
+```bash
+docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml down -v
+```
+
+### Why Multiple Command Formats?
+
+You'll see commands in two formats:
+
+**Short format** (from docker-deploy directory):
+```bash
+cd /workspaces/dolibarr/docker-deploy
+docker compose up -d
+```
+
+**Full path format** (from anywhere):
+```bash
+docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml up -d
+```
+
+Both do the same thing. Use full path when:
+- You're not in the docker-deploy directory
+- Running from scripts
+- Codespace terminal opened in different directory
+
+### Recommended Workflow
+
+**Normal start/resume** (after Codespace restart):
+```bash
+docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml up -d
+```
+
+**Quick restart** (containers already exist):
+```bash
+docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml restart
+```
+
+**Clean stop** (pause work, keep data):
+```bash
+docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml down
+```
+
+**After Dockerfile changes**:
+```bash
+docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml build --no-cache app
+docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml up -d
+```
+
 ## Docker Configuration Files
 
 ### 1. Dockerfile
@@ -120,14 +280,14 @@ docker-deploy/
   - Denies direct access to `/conf` directory (protects configuration)
 - URL rewriting: Falls back to `index.php` for clean URLs
 
-## Setup Instructions
+## Complete Setup Instructions
 
 ### Prerequisites
 - Docker Engine 20.10+
 - Docker Compose V2
 - Git
 
-### Initial Setup
+### Initial Setup from Scratch
 
 1. **Clone the repository**:
 ```bash
@@ -135,13 +295,17 @@ git clone <your-repo-url>
 cd dolibarr/docker-deploy
 ```
 
-2. **Build and start containers**:
+2. **Build the containers** (first time only):
 ```bash
 docker compose build --no-cache
+```
+
+3. **Start all services**:
+```bash
 docker compose up -d
 ```
 
-3. **Verify services are running**:
+4. **Verify services are running**:
 ```bash
 docker compose ps
 ```
@@ -154,7 +318,7 @@ docker-deploy-db-1    mariadb:10.11         "docker-entrypoint.s…"   db       
 docker-deploy-web-1   nginx:stable-alpine   "/docker-entrypoint.…"   web       Up
 ```
 
-4. **Verify PHP extensions**:
+5. **Verify PHP extensions**:
 ```bash
 docker compose exec app php -m | grep -E '(mysqli|calendar|imap)'
 ```
@@ -166,12 +330,13 @@ imap
 mysqli
 ```
 
-5. **Access Dolibarr installer**:
-Open browser to: `http://localhost:8080/`
+6. **Access Dolibarr installer**:
+- Local: `http://localhost:8080/`
+- Codespace: Your unique Codespace URL on port 8080
 
-### Installation Process
+### Dolibarr Installation Process
 
-1. The Dolibarr installer will automatically launch
+1. The Dolibarr installer will automatically launch when you access the URL
 2. Follow the setup wizard with these database settings:
    - **Database Type**: MySQL/MariaDB
    - **Database Host**: `db`
@@ -179,8 +344,8 @@ Open browser to: `http://localhost:8080/`
    - **Database Name**: `dolibarr`
    - **Database User**: `dolibarr`
    - **Database Password**: `dolibarrpass`
-3. Create admin user credentials
-4. Complete installation
+3. Create your admin user credentials
+4. Complete the installation
 
 The installer will:
 - Create `htdocs/conf/conf.php` with proper configuration
@@ -188,6 +353,14 @@ The installer will:
 - Create `htdocs/documents/install.lock` to prevent reinstallation
 
 ## Common Issues & Solutions
+
+### Issue: 502 Bad Gateway
+**Cause**: Containers are stopped (common after Codespace restart/pause)
+
+**Solution**:
+```bash
+docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml up -d
+```
 
 ### Issue: "Driver mysqli for PHP not available"
 **Solution**: Verify mysqli extension is installed:
@@ -228,61 +401,107 @@ docker compose exec app id
 ```
 Should be writable by uid 1000 (dolibarr user)
 
-### Issue: Nginx 502 Bad Gateway
-**Cause**: PHP-FPM service not running or incorrect FastCGI configuration
-
-**Solution**:
-```bash
-docker compose logs app
-docker compose restart app
-```
-
 ## Maintenance Commands
 
-### View logs
+### Container Management
 ```bash
-docker compose logs -f           # All services
-docker compose logs -f app       # PHP-FPM only
-docker compose logs -f web       # Nginx only
-docker compose logs -f db        # MariaDB only
-```
-
-### Restart services
-```bash
-docker compose restart           # All services
-docker compose restart app       # PHP-FPM only
-```
-
-### Stop and remove containers
-```bash
-docker compose down              # Keep volumes
-docker compose down -v           # Remove volumes (deletes data!)
-```
-
-### Rebuild after changes
-```bash
-docker compose build --no-cache app
+# Start containers
 docker compose up -d
+
+# Stop containers
+docker compose stop
+
+# Restart containers
+docker compose restart
+
+# Remove containers (keeps volumes/data)
+docker compose down
+
+# Remove everything including data (CAUTION!)
+docker compose down -v
 ```
 
-### Access container shell
+### Logs and Debugging
 ```bash
-docker compose exec app bash     # PHP-FPM container
-docker compose exec web sh       # Nginx container (Alpine uses sh)
-docker compose exec db bash      # MariaDB container
+# View logs (all services)
+docker compose logs -f
+
+# View logs (specific service)
+docker compose logs -f app
+docker compose logs -f web
+docker compose logs -f db
+
+# Show last 50 lines
+docker compose logs --tail=50 app
 ```
 
-### Database backup
+### Access Container Shell
 ```bash
-docker compose exec db mysqldump -u dolibarr -pdobibarrpass dolibarr > backup.sql
+# PHP-FPM container
+docker compose exec app bash
+
+# Nginx container (Alpine uses sh)
+docker compose exec web sh
+
+# MariaDB container
+docker compose exec db bash
 ```
 
-### Database restore
+### Database Operations
 ```bash
-docker compose exec -T db mysql -u dolibarr -pdobibarrpass dolibarr < backup.sql
+# Backup database
+docker compose exec db mysqldump -u dolibarr -pdoblibarrpass dolibarr > backup.sql
+
+# Restore database
+docker compose exec -T db mysql -u dolibarr -pdoblibarrpass dolibarr < backup.sql
+
+# Access MySQL CLI
+docker compose exec db mysql -u dolibarr -pdoblibarrpass dolibarr
 ```
 
-## Key Changes Made
+### Rebuild After Configuration Changes
+```bash
+# Rebuild app image (after Dockerfile changes)
+docker compose build --no-cache app
+
+# Recreate containers
+docker compose up -d --force-recreate
+```
+
+## Testing and Verification
+
+### Test PHP Extensions
+```bash
+docker compose exec app php -r "
+\$required = ['mysqli', 'calendar', 'imap', 'gd', 'intl', 'mbstring', 'xml', 'zip'];
+\$loaded = get_loaded_extensions();
+foreach (\$required as \$ext) {
+    echo \$ext . ': ' . (in_array(\$ext, \$loaded) ? 'OK' : 'MISSING') . PHP_EOL;
+}
+"
+```
+
+### Test Database Connection
+```bash
+docker compose exec app php -r "
+\$conn = new mysqli('db', 'dolibarr', 'dolibarrpass', 'dolibarr');
+if (\$conn->connect_error) {
+    die('Connection failed: ' . \$conn->connect_error);
+}
+echo 'Database connection: OK' . PHP_EOL;
+\$conn->close();
+"
+```
+
+### Test Web Server
+```bash
+# From inside Codespace
+curl -I http://localhost:8080/
+
+# Should return HTTP 200 or 302 (redirect to installer)
+```
+
+## Key Changes Made During Setup
 
 ### 1. PHP Base Image Selection
 - **Changed from**: `php:8.2-fpm` (Debian trixie/unstable)
@@ -322,9 +541,10 @@ For production deployment, consider:
 
 1. **Security**:
    - Change default database passwords
-   - Use secrets management (Docker secrets, environment files)
+   - Use Docker secrets or environment files
    - Enable HTTPS (add SSL certificates to nginx)
    - Restrict database port exposure (remove `ports:` from db service)
+   - Use specific image tags instead of `stable` or `latest`
 
 2. **Performance**:
    - Add PHP OPcache configuration
@@ -332,43 +552,63 @@ For production deployment, consider:
    - Tune MariaDB configuration (buffer sizes, connection limits)
    - Consider using Redis for session storage
 
-3. **Backup**:
+3. **Backup Strategy**:
    - Implement automated database backups
-   - Backup document storage volume
+   - Backup document storage volume regularly
    - Version control configuration files
+   - Test restore procedures
 
 4. **Monitoring**:
    - Add health checks to services
    - Configure logging aggregation
    - Monitor container resources
+   - Set up alerts for service failures
 
-## Testing PHP Extensions
+## Troubleshooting Tips
 
-To verify all required extensions are available:
-
+### Containers Won't Start
 ```bash
-docker compose exec app php -r "
-\$required = ['mysqli', 'calendar', 'imap', 'gd', 'intl', 'mbstring', 'xml', 'zip'];
-\$loaded = get_loaded_extensions();
-foreach (\$required as \$ext) {
-    echo \$ext . ': ' . (in_array(\$ext, \$loaded) ? 'OK' : 'MISSING') . PHP_EOL;
-}
-"
+# Check for port conflicts
+sudo netstat -tuln | grep -E ':(8080|3306)'
+
+# Check Docker daemon
+docker info
+
+# View detailed errors
+docker compose logs
 ```
 
-## Database Connection Test
-
-To verify database connectivity from PHP:
-
+### Database Connection Issues
 ```bash
-docker compose exec app php -r "
-\$conn = new mysqli('db', 'dolibarr', 'dolibarrpass', 'dolibarr');
-if (\$conn->connect_error) {
-    die('Connection failed: ' . \$conn->connect_error);
-}
-echo 'Database connection: OK' . PHP_EOL;
-\$conn->close();
-"
+# Check if MariaDB is ready
+docker compose exec db mysqladmin ping -h localhost
+
+# Check database exists
+docker compose exec db mysql -u root -prootpassword -e "SHOW DATABASES;"
+```
+
+### Permission Issues
+```bash
+# Check ownership inside container
+docker compose exec app ls -la /var/www/html/conf
+
+# Fix permissions if needed (from host)
+chmod -R 777 /workspaces/dolibarr/htdocs/conf
+chmod -R 777 /workspaces/dolibarr/htdocs/documents
+```
+
+### Reset Everything
+If you need to start completely fresh:
+```bash
+# Stop and remove everything
+docker compose down -v
+
+# Remove built images
+docker rmi docker-deploy-app
+
+# Start from scratch
+docker compose build --no-cache
+docker compose up -d
 ```
 
 ## Version Information
@@ -379,12 +619,14 @@ echo 'Database connection: OK' . PHP_EOL;
 - **MariaDB**: 10.11
 - **Base OS**: Debian Bookworm (12)
 
-## Support & References
+## Useful Links
 
 - Dolibarr Documentation: https://www.dolibarr.org/documentation
 - Docker Documentation: https://docs.docker.com/
+- Docker Compose Reference: https://docs.docker.com/compose/compose-file/
 - PHP Docker Images: https://hub.docker.com/_/php
 - Nginx Documentation: https://nginx.org/en/docs/
+- MariaDB Documentation: https://mariadb.org/documentation/
 
 ## Changelog
 
@@ -396,8 +638,14 @@ echo 'Database connection: OK' . PHP_EOL;
   - Fixed volume mounts for installer write access
   - Committed to git (commit: 3e41004)
 
+- **2025-10-27**: Documentation update
+  - Added comprehensive startup commands
+  - Included Codespace restart procedures
+  - Enhanced troubleshooting section
+  - Added quick start commands section
+
 ---
 
-**Last Updated**: October 26, 2025
+**Last Updated**: October 27, 2025
 **Maintained By**: aummind
 **Repository**: dolibarr (develop branch)
