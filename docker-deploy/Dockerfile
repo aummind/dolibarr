@@ -32,8 +32,8 @@ RUN apt-get update && apt-get install -y \
         soap \
         bcmath \
         pcntl \
-    && pecl install imagick \
-    && docker-php-ext-enable imagick \
+    && (pecl install imagick || echo "imagick install failed, skipping") \
+    && (docker-php-ext-enable imagick || echo "imagick enable failed, skipping") \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
