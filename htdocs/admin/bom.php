@@ -527,6 +527,8 @@ if (!getDolGlobalString('PDF_ALLOW_HTML_FOR_FREE_TEXT')) {
 	$doleditor = new DolEditor($variablename, getDolGlobalString($variablename), '', 80, 'dolibarr_notes');
 	print $doleditor->Create();
 }
+print '</td><td class="right">';
+print '<input type="submit" class="button button-edit small" value="'.$langs->trans("Modify").'">';
 print "</td></tr>\n";
 
 // Use draft Watermark
@@ -535,6 +537,8 @@ print '<tr class="oddeven"><td>';
 print $form->textwithpicto($langs->trans("WatermarkOnDraftBOMs"), $htmltext, 1, 'help', '', 0, 2, 'watermarktooltip').'<br>';
 print '</td><td>';
 print '<input class="flat minwidth200" type="text" name="BOM_DRAFT_WATERMARK" value="'.dol_escape_htmltag(getDolGlobalString('BOM_DRAFT_WATERMARK')).'">';
+print '</td><td class="right">';
+print '<input type="submit" class="button button-edit small" value="'.$langs->trans("Modify").'">';
 print "</td></tr>\n";
 
 print '</table>';
