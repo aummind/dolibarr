@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspace:cached
+      - dolibarr_documents:/var/www/documents
+    command: sleep infinity
+    environment:
+      - PHP_INI_DATE_TIMEZONE=UTC
+      - PHP_INI_MEMORY_LIMIT=256M
+    depends_on:
+      - mariadb
+      - mail
+    networks:
+      - dolibarr-dev
+    extra_hosts:
+      - "localhost.localdomain:127.0.0.1"
+      - "host.docker.internal:host-gateway"
+
+  mariadb:
+    image: mariadb:10.11
+    restart: unless-stopped
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassfordev
+      MYSQL_DATABASE: dolibarr
+      MYSQL_USER: dolibarr
+      MYSQL_PASSWORD: dolibarrpass
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - dolibarr-dev
+
+  mail:
+    image: maildev/maildev
+    restart: unless-stopped
+    ports:
+      - "8081:1080"
+      - "1025:1025"
+    networks:
+      - dolibarr-dev
+
+networks:
+  dolibarr-dev:
+    driver: bridge
+
+volumes:
+  mariadb_data:
+  dolibarr_documents:

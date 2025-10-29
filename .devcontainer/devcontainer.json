@@ -1,0 +1,38 @@
+{
+	"name": "Dolibarr Development",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "web",
+	"workspaceFolder": "/workspace",
+	"forwardPorts": [80, 3306, 8081],
+	"portsAttributes": {
+		"80": {
+			"label": "Dolibarr Web",
+			"onAutoForward": "notify"
+		},
+		"3306": {
+			"label": "MariaDB",
+			"onAutoForward": "silent"
+		},
+		"8081": {
+			"label": "MailDev",
+			"onAutoForward": "silent"
+		}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"bmewburn.vscode-intelephense-client",
+				"xdebug.php-debug",
+				"mehedidracula.php-namespace-resolver",
+				"zobo.php-intellisense",
+				"felixfbecker.php-intellisense"
+			],
+			"settings": {
+				"php.validate.executablePath": "/usr/local/bin/php",
+				"intelephense.environment.phpVersion": "8.1.0"
+			}
+		}
+	},
+	"postCreateCommand": "bash .devcontainer/setup.sh",
+	"remoteUser": "www-data"
+}
