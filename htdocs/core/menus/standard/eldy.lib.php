@@ -78,7 +78,7 @@ function print_eldy_menu($db, $atarget, $type_user, &$tabMenu, &$menu, $noout = 
 	if (!empty($homepage) && !$user->admin) {
 		$homepage = dol_buildpath($homepage, 1);
 	} else {
-		$homepage = dolBuildUrl('/index.php', ['mainmenu'=>'home', 'leftmenu'=>'home']);
+		$homepage = '/index.php?mainmenu=home&leftmenu=home';
 	}
 	$menu_arr[] = array(
 		'name' => 'Home',
