@@ -432,7 +432,11 @@ if ($usecompression) {
 	}
 }
 
-//dol_syslog('We found some compression algorithm: '.$foundonealgorithm.' -> usecompression='.$usecompression, LOG_DEBUG);
+
+if (getDolGlobalString('MAIN_API_DEBUG')) {
+		dol_syslog('We found some compression algorithm: '.$foundonealgorithm.' -> usecompression='.$usecompression, LOG_DEBUG, 0, '_api');
+}
+
 
 Luracast\Restler\Defaults::$returnResponse = $usecompression;
 
