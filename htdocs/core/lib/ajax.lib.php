@@ -760,8 +760,8 @@ function ajax_constantonoff($code, $input = array(), $entity = null, $revertonof
 		}
 
 		$out .= '<div id="confirm_'.$code.'" title="" style="display: none;"></div>';
-		$out .= '<span id="set_'.$code.'" class="valignmiddle inline-block linkobject '.($value ? 'hideobject' : '').($morecss ? ' '.$morecss : '').'">'.($revertonoff ? img_picto($langs->trans("Enabled"), 'switch_on'.$suffixoff, '', 0, 0, 0, '', '', $marginleftonlyshort) : img_picto($langs->trans("Disabled"), 'switch_off'.$suffixoff, '', 0, 0, 0, '', '', $marginleftonlyshort)).'</span>';
-		$out .= '<span id="del_'.$code.'" class="valignmiddle inline-block linkobject '.($value ? '' : 'hideobject').($morecss ? ' '.$morecss : '').'">'.($revertonoff ? img_picto($langs->trans("Disabled"), 'switch_off'.$suffixon, '', 0, 0, 0, '', '', $marginleftonlyshort) : img_picto($langs->trans("Enabled"), 'switch_on'.$suffixon, '', 0, 0, 0, '', '', $marginleftonlyshort)).'</span>';
+		$out .= '<span id="set_'.$code.'" class="valignmiddle inline-block linkobject '.(!empty($conf->global->$code) ? 'hideobject' : '').' '.$morecss.'">'.($revertonoff ? img_picto($langs->trans("Enabled"), 'switch_on', '', false, 0, 0, '', '', $marginleftonlyshort) : img_picto($langs->trans("Disabled"), 'switch_off', '', false, 0, 0, '', '', $marginleftonlyshort)).'</span>';
+		$out .= '<span id="del_'.$code.'" class="valignmiddle inline-block linkobject '.(!empty($conf->global->$code) ? '' : 'hideobject').' '.$morecss.'">'.($revertonoff ? img_picto($langs->trans("Disabled"), 'switch_off'.$suffix, '', false, 0, 0, '', '', $marginleftonlyshort) : img_picto($langs->trans("Enabled"), 'switch_on'.$suffix, '', false, 0, 0, '', '', $marginleftonlyshort)).'</span>';
 		$out .= "\n";
 	}
 
