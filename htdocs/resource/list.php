@@ -482,9 +482,10 @@ print '<table class="tagtable liste">'."\n";
 // Fields title search
 
 print '<tr class="liste_titre_filter">';
+// Action column
 if (getDolGlobalString('MAIN_CHECKBOX_LEFT_COLUMN')) {
-	print '<td class="liste_titre center maxwidthsearch">';
-	$searchpicto = $form->showFilterButtons();
+	print '<td class="liste_titre maxwidthsearch center">';
+	$searchpicto = $form->showFilterButtons('left');
 	print $searchpicto;
 	print '</td>';
 }
@@ -561,6 +562,7 @@ $totalarray['nbfield'] = 0;
 // Fields title label
 
 print '<tr class="liste_titre">';
+// Action column
 if (getDolGlobalString('MAIN_CHECKBOX_LEFT_COLUMN')) {
 	print_liste_field_titre($selectedfields, $_SERVER["PHP_SELF"], "", '', '', '', $sortfield, $sortorder, 'center maxwidthsearch ');
 }
@@ -628,8 +630,7 @@ while ($i < $imaxinloop) {
 	$objectstatic->max_users = $obj->max_users;
 	$objectstatic->url = $obj->url;
 
-	print '<tr class="oddeven row-with-select">';
-
+	print '<tr data-rowid="'.$obj->rowid.'"  class="oddeven">';
 	// Action column
 	if (getDolGlobalString('MAIN_CHECKBOX_LEFT_COLUMN')) {
 		print '<td class="nowrap center">';
