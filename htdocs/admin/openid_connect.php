@@ -35,6 +35,8 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/openid_connect.lib.php';
  * @var HookManager $hookmanager
  * @var Translate $langs
  * @var User $user
+ *
+ * @var string $dolibarr_main_authentication
  */
 
 $langs->loadLangs(array("users", "admin", "other"));
@@ -140,9 +142,10 @@ print dol_get_fiche_head($head, 'openid', '', -1);
 
 print $langs->trans("SeeWikiDocForHelpInSetupOpenIDCOnnect");
 print ' - ';
-print img_picto('', 'url', 'class="pictofixedwidth"').'<a target="_blank" href="https://wiki.dolibarr.org/index.php?title=Authentication,_SSO_and_SSL#Mode_openid_connect">';
-print $langs->trans("SeeHere");
-print '</a>';
+$urlforwikidoc = img_picto('', 'url', 'class="pictofixedwidth"').'<a target="_blank" href="https://wiki.dolibarr.org/index.php?title=Authentication,_SSO_and_SSL#Mode_openid_connect">';
+$urlforwikidoc .= $langs->trans("SeeHere");
+$urlforwikidoc .= '</a>';
+print $urlforwikidoc;
 
 print dol_get_fiche_end();
 
@@ -158,10 +161,19 @@ if (!empty($conf->use_javascript_ajax)) {
 	}
 }
 
-print '<br><br>';
+print '<br>';
 
 
 if (getDolGlobalString('MAIN_AUTHENTICATION_OIDC_ON')) {
+	if (!preg_match('/openid_connect/', $dolibarr_main_authentication)) {
+		$langs->load("errors");
+		print info_admin($langs->trans("ErrorOpenIDSetupConfNotComplete").':  '.$urlforwikidoc, 0, 0, 1, 'warning');
+	} else {
+		print info_admin('In conf.php file: dolibarr_main_authentication is '.$dolibarr_main_authentication);
+	}
+
+	print '<br>';
+
 	print '<form method="post" action="'.dolBuildUrl($_SERVER["PHP_SELF"]).'">';
 	print '<input type="hidden" name="token" value="'.newToken().'">';
 	print '<input type="hidden" name="action" value="set">';
