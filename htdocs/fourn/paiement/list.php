@@ -747,6 +747,109 @@ while ($i < $imaxinloop) {
 
 		print '</tr>'."\n";
 	}
+
+	// Ref
+	if (!empty($arrayfields['p.ref']['checked'])) {
+		print '<td class="nowraponall">';
+		print $paymentfournstatic->getNomUrl(1);
+		print '</td>';
+		if (!$i) {
+			$totalarray['nbfield']++;
+		}
+	}
+
+	// Date
+	if (!empty($arrayfields['p.datep']['checked'])) {
+		$dateformatforpayment = 'dayhour';
+		print '<td class="nowrap center">'.dol_print_date($db->jdate($objp->datep), $dateformatforpayment).'</td>';
+		if (!$i) {
+			$totalarray['nbfield']++;
+		}
+	}
+
+	// Thirdparty
+	if (!empty($arrayfields['s.nom']['checked'])) {
+		print '<td class="tdoverflowmax125">';
+		if ($objp->socid > 0) {
+			print $companystatic->getNomUrl(1, '', 24);
+		}
+		print '</td>';
+		if (!$i) {
+			$totalarray['nbfield']++;
+		}
+	}
+
+	// Pyament type
+	if (!empty($arrayfields['c.libelle']['checked'])) {
+		$payment_type = $langs->trans("PaymentType".$objp->paiement_type) != ("PaymentType".$objp->paiement_type) ? $langs->trans("PaymentType".$objp->paiement_type) : $objp->paiement_libelle;
+		print '<td>'.$payment_type.' '.dol_trunc($objp->num_paiement, 32).'</td>';
+		if (!$i) {
+			$totalarray['nbfield']++;
+		}
+	}
+
+	// Cheque number (fund transfer)
+	if (!empty($arrayfields['p.num_paiement']['checked'])) {
+		print '<td>'.$objp->num_paiement.'</td>';
+		if (!$i) {
+			$totalarray['nbfield']++;
+		}
+	}
+
+	// Bank account
+	if (!empty($arrayfields['ba.label']['checked'])) {
+		print '<td class="tdoverflowmax125">';
+		if ($objp->bid) {
+			$accountstatic->id = $objp->bid;
+			$accountstatic->ref = $objp->bref;
+			$accountstatic->label = $objp->blabel;
+			$accountstatic->number = $objp->number;
+			$accountstatic->iban = $objp->iban_prefix;
+			$accountstatic->bic = $objp->bic;
+			$accountstatic->currency_code = $objp->currency_code;
+			$accountstatic->account_number = $objp->account_number;
+
+			$accountingjournal = new AccountingJournal($db);
+			$accountingjournal->fetch($objp->accountancy_journal);
+			$accountstatic->accountancy_journal = $accountingjournal->code;
+
+			print $accountstatic->getNomUrl(1);
+		} else {
+			print '&nbsp;';
+		}
+		print '</td>';
+		if (!$i) {
+			$totalarray['nbfield']++;
+		}
+	}
+
+	// Amount
+	if (!empty($arrayfields['p.amount']['checked'])) {
+		print '<td class="right">';
+		if ($objp->nbinvoices > 1 || ($objp->totalamount && $objp->amount != $objp->totalamount)) {
+			print $form->textwithpicto('', $langs->trans("PaymentMadeForSeveralInvoices"));
+		}
+		print '<span class="amount">'.price($objp->amount).'</span>';
+		print '</td>';
+		if (!$i) {
+			$totalarray['nbfield']++;
+		}
+		$totalarray['pos'][$checkedCount] = 'amount';
+		$totalarray['val']['amount'] += $objp->amount;
+	}
+
+	// Fields from hook
+	$parameters = array('arrayfields'=>$arrayfields, 'obj'=>$objp, 'i'=>$i, 'totalarray'=>&$totalarray);
+	$reshook = $hookmanager->executeHooks('printFieldListValue', $parameters, $object, $action); // Note that $action and $object may have been modified by hook
+	print $hookmanager->resPrint;
+
+	// Buttons
+	print '<td></td>';
+	if (!$i) {
+		$totalarray['nbfield']++;
+	}
+
+	print '</tr>';
 	$i++;
 }
 
