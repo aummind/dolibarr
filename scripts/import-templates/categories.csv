@@ -1,15 +1,38 @@
 label,parent_label,description
-SOLVENT,Laboratory,"Solvents - Organic and inorganic volatile compounds, water"
-CHEMICAL,Laboratory,Chemicals - Pure and/or compounded
-RESIN,Laboratory,Resins - Thermoplastic thermosetting functional bio-sourced oils etc
-POLYMERS,Laboratory,Polymers - Synthetic natural modified polymers
-FORMULATED,Laboratory,Formulated Products - Ready-to-use solutions custom blends
-OTHERS,Laboratory,Other materials - Gases desiccants etc
-PIGMENTS,Laboratory,Pigments and Dyes - Organic/inorganic pigments dyes
-FILLER,Laboratory,Fillers - Mineral organic reinforcing fillers others
-ADDITIVE,Laboratory,Additives - Processing aids performance enhancers property modifiers dispersing agents wetting agents defoamers surface tension modifiers deaerators
-FUNCTIONAL,Laboratory,Functional Fillers - Electrical flame retardant thermal optical
-PAINTS,Laboratory,Paints and Coatings - Paints protective coatings
-LUBRICANTS,Laboratory,Chemical Lubricants - Lubricants greases
-SAMPLE,Laboratory,"Materials for trials, testing and analysis"
+SOLVENT,LABORATORY,"Solvents - Organic and inorganic volatile compounds, water"
+CHEMICAL,LABORATORY,Chemicals - Pure and/or compounded
+RESIN,LABORATORY,Resins - Thermoplastic thermosetting functional bio-sourced oils etc
+POLYMERS,LABORATORY,Polymers - Synthetic natural modified polymers
+FORMULATED,LABORATORY,Formulated Products - Ready-to-use solutions custom blends
+OTHERS,LABORATORY,Other materials - Gases desiccants etc
+PIGMENTS,LABORATORY,Pigments and Dyes - Organic/inorganic pigments dyes
+FILLER,LABORATORY,Fillers - Mineral organic reinforcing fillers others
+ADDITIVE,LABORATORY,Additives - Processing aids performance enhancers property modifiers dispersing agents wetting agents defoamers surface tension modifiers deaerators
+FUNCTIONAL,LABORATORY,Functional Fillers - Electrical flame retardant thermal optical
+PAINTS,LABORATORY,Paints and Coatings - Paints protective coatings
+LUBRICANTS,LABORATORY,Chemical Lubricants - Lubricants greases
+SAMPLE,LABORATORY,"Materials for trials, testing and analysis"
+SOLVENT,MANUFACTURING,"Solvents - Organic and inorganic volatile compounds, water"
+CHEMICAL,MANUFACTURING,Chemicals - Pure and/or compounded
+RESIN,MANUFACTURING,Resins - Thermoplastic thermosetting functional bio-sourced oils etc
+POLYMERS,MANUFACTURING,Polymers - Synthetic natural modified polymers
+FORMULATED,MANUFACTURING,Formulated Products - Ready-to-use solutions custom blends
+OTHERS,MANUFACTURING,Other materials - Gases desiccants etc
+PIGMENTS,MANUFACTURING,Pigments and Dyes - Organic/inorganic pigments dyes
+FILLER,MANUFACTURING,Fillers - Mineral organic reinforcing fillers others
+ADDITIVE,MANUFACTURING,Additives - Processing aids performance enhancers property modifiers dispersing agents wetting agents defoamers surface tension modifiers deaerators
+FUNCTIONAL,MANUFACTURING,Functional Fillers - Electrical flame retardant thermal optical
+PAINTS,MANUFACTURING,Paints and Coatings - Paints protective coatings
+LUBRICANTS,MANUFACTURING,Chemical Lubricants - Lubricants greases
+SAMPLE,MANUFACTURING,Chemical Samples - Test samples reference standards
+CLEANING,MAINTENANCE,Cleaning Compounds - Rust convertor passivator degreaser solvent detergent cleaners
+COATINGS,MAINTENANCE,Maintenance Coatings - Paints protective coatings touch-ups
+OILS AND LUBRICANTS,MAINTENANCE,Oils and lubricants - Equipment oils bearing greases
+SPARES,MAINTENANCE,Spare Parts - Mechanical electrical instrumentation parts
+TOOLS,MAINTENANCE,Tools - Mechanical tool machining kits speciality
+CONSUMABLES,MAINTENANCE,Maintenance Consumables - Filters gaskets seals  grinding media
+EQUIPMENT,SAFETY,Safety Equipment - Fire systems emergency showers ventilation
+CONSUMABLES-S,SAFETY,Safety Consumables - First aid spill kits absorbents
+PROTECTIVE,SAFETY,Protective Gear - PPE respiratory protection eye protection
+CHEMICALS,SAFETY,Safety Chemicals - Neutralizers emergency response chemicals
 
