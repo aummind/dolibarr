@@ -1,0 +1,3 @@
+supplier_name,alias,status,country,phone,email
+Acme Chemicals,ACME,1,IN,+91-11-55555555,procurement@acme.example
+ChemCorp,CHEMCORP,1,IN,+91-22-44444444,sales@chemcorp.example

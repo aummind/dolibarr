@@ -1,0 +1,4 @@
+parent_ref,variant_ref,variant_label,attribute_values,status
+CHEM-IPA,CHEM-IPA-999,IPA 99.9% 1L,Purity=99.9%;Packaging=1L,1
+CHEM-IPA,CHEM-IPA-995-5L,IPA 99.5% 5L,Purity=99.5%;Packaging=5L,1
+CHEM-ETH,CHEM-ETH-96-1L,Ethanol 96% 1L,Concentration=96%;Packaging=1L,1

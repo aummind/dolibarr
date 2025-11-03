@@ -1,0 +1,4 @@
+product_ref,supplier_name,supplier_product_ref,trade_name,price,qty_min,currency,tva_tx,lead_time_days
+CHEM-IPA,Acme Chemicals,AC-IPA-001,Isopropyl Alcohol,140.00,1,INR,18,7
+CHEM-IPA,ChemCorp,CC-IPA-99,Rubbing Alcohol,135.00,1,INR,18,5
+CHEM-ETH,Acme Chemicals,AC-ETH-001,Ethanol,120.00,1,INR,18,7

@@ -7,7 +7,7 @@
 	
 	cd dolibarr/docker
 
-	sudo docker-compose build
+	sudo docker compose build
 
 	sudo -s
 
@@ -15,7 +15,7 @@
 	export HOST_GROUP_ID=$(id -g)
 	export MYSQL_ROOT_PWD=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 13; echo)
 	
-	docker-compose up -d
+	docker compose up -d
 
 
 Warning: There is no persistency of data. This process is for dev purpose only.

@@ -1,7 +1,6 @@
 services:
   web:
     image: nginx:stable-alpine
-    restart: unless-stopped
     ports:
       - "8080:80"
     volumes:
@@ -15,24 +14,17 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    restart: unless-stopped
-    stop_grace_period: 30s
     volumes:
       - ../htdocs:/var/www/html
       - dolibarr_documents:/var/www/html/documents
       # Let Dolibarr create/manage conf/conf.php on first install
     environment:
       - PHP_INI_DIR=/usr/local/etc/php
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
     depends_on:
       - db
-      - redis
 
   db:
     image: mariadb:10.11
-    restart: unless-stopped
-    stop_grace_period: 60s
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
@@ -43,12 +35,6 @@ services:
       - mariadb_data:/var/lib/mysql
     ports:
       - "3306:3306"
-
-  redis:
-    image: redis:7-alpine
-    restart: unless-stopped
-    command: ["redis-server", "--save", "60", "100", "--loglevel", "warning"]
-    # Internal only; no published port needed for compose network
 
 volumes:
   mariadb_data:

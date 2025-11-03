@@ -1,0 +1,30 @@
+services:
+  db:
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  app:
+    healthcheck:
+      test: ["CMD-SHELL", "php -r 'exit((extension_loaded(\"mysqli\") && extension_loaded(\"gd\")) ? 0 : 1);'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    depends_on:
+      app:
+        condition: service_healthy

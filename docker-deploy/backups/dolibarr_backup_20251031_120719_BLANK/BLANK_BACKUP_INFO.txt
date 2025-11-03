@@ -1,0 +1,19 @@
+DOLIBARR BLANK BACKUP
+====================
+
+Created: Fri Oct 31 12:07:22 UTC 2025
+Type: Blank/Initial backup (after installation, before business data)
+Purpose: Base state for system reset/clean start
+
+This backup contains:
+- Fresh Dolibarr installation database schema
+- Initial configuration after setup
+- Empty or minimal documents directory
+- No business data (customers, invoices, products, etc.)
+
+This backup should be preserved as your "clean slate" backup.
+Use this to restore to a fresh state when needed.
+
+Database size: 623K bytes
+Documents size: 1.7M bytes
+Total backup size: 2.3M

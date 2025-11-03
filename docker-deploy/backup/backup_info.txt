@@ -1,0 +1,8 @@
+2025-10-27 11:57:08
+Working Dolibarr Docker configuration backup created
+Docker version 28.3.1-1, build 38b7060a218775811da953650d8df7d492653f8f
+Docker Compose version v2.38.2
+PHP 8.2.29 (cli) (built: Oct 21 2025 01:36:43) (NTS)
+Copyright (c) The PHP Group
+Zend Engine v4.2.29, Copyright (c) Zend Technologies
+    with Zend OPcache v8.2.29, Copyright (c), by Zend Technologies

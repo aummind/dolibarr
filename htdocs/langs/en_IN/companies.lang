@@ -1,5 +1,33 @@
 # Dolibarr language file - Source file is en_US - companies
 OverAllProposals=Quotations
-ProfId1IN=Prof Id 1 (GSTIN)
+
+##### Professional ID Customization for Indian Chemical Manufacturing #####
+ProfId1Short=GSTIN
+ProfId2Short=PAN
+ProfId3Short=CIN
+ProfId4Short=UDYAM
+ProfId5Short=Factory Lic
+ProfId6Short=PCB Consent
+ProfId7Short=Drug Lic
+ProfId8Short=IEC
+
+ProfId1=GST Registration Number (GSTIN)
+ProfId2=Permanent Account Number (PAN)
+ProfId3=Corporate Identity Number (CIN)
+ProfId4=UDYAM Registration Number
+ProfId5=Factory License Number
+ProfId6=PCB Consent Number
+ProfId7=Drug Manufacturing License
+ProfId8=Import Export Code (IEC)
+
+ProfId1IN=GST Registration Number (GSTIN)
+ProfId2IN=Permanent Account Number (PAN) 
+ProfId3IN=Corporate Identity Number (CIN)
+ProfId4IN=UDYAM Registration Number
+ProfId5IN=Factory License Number
+ProfId6IN=PCB Consent Number
+ProfId7IN=Drug Manufacturing License
+ProfId8IN=Import Export Code (IEC)
+
 ContactForProposals=Quotation's contact
 NoContactForAnyProposal=This contact is not a contact for any quotation

@@ -1,0 +1,4 @@
+attribute_name,label,type,position
+Purity,Purity,select,1
+Concentration,Concentration,select,2
+Packaging,Packaging,select,3

@@ -1,0 +1,16 @@
+# Example only; replace with your classifications. No data is required until configuration.
+# Structure:
+# - name: Top-level category (Bulk Chemicals | Specialty Chemicals | Formulations)
+#   children:
+#     - name: Sub-classification
+#       notes: Optional notes
+
+- name: Bulk Chemicals
+  children:
+    - name: (to be provided)
+- name: Specialty Chemicals
+  children:
+    - name: (to be provided)
+- name: Formulations
+  children:
+    - name: (to be provided)

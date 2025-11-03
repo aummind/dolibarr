@@ -1,109 +1,123 @@
-# Dolibarr Docker Setup Documentation
+# Dolibarr Docker Setup Guide
+
+Complete setup documentation for Dolibarr ERP/CRM using Docker containers in GitHub Codespaces.
 
 ## Overview
-This directory contains detailed setup and configuration documentation for each component of the Dolibarr Docker deployment.
+
+This setup provides a production-ready Dolibarr installation with:
+- **PHP 8.2-FPM** with all required extensions
+- **MariaDB 10.11.8** with UTF8MB4 support
+- **Nginx 1.26.2** as reverse proxy
+- **Smart configuration** that auto-detects environment
+- **Complete backup system** with retention policy
+- **Daily workflow scripts** for safe operations
+
+## Quick Start
+
+1. **Start the system:**
+   ```bash
+   cd /workspaces/dolibarr/docker-deploy
+   ./daily_start.sh
+   ```
+
+2. **Open Dolibarr:**
+   ```bash
+   "$BROWSER" http://localhost:8080
+   ```
+
+3. **Complete installation** using the web interface
+
+4. **Create blank backup** (after installation, before real data):
+   ```bash
+   ./mark_blank_backup.sh
+   ```
+
+5. **Daily exit** (creates backup and stops safely):
+   ```bash
+   ./daily_exit.sh
+   ```
 
 ## Documentation Structure
 
-### Component Guides
-- **[01-docker-commands.md](01-docker-commands.md)** - Docker Compose commands and container management
-- **[02-php-configuration.md](02-php-configuration.md)** - PHP-FPM setup, extensions, and configuration
-- **[03-nginx-configuration.md](03-nginx-configuration.md)** - Nginx web server setup and configuration
-- **[04-mariadb-configuration.md](04-mariadb-configuration.md)** - MariaDB database setup and management
-- **[05-dolibarr-installation.md](05-dolibarr-installation.md)** - Dolibarr installation process and configuration
-- **[06-troubleshooting.md](06-troubleshooting.md)** - Common issues and solutions
+- **[01-installation.md](01-installation.md)** - Complete installation process
+- **[02-configuration.md](02-configuration.md)** - Configuration details and customization
+- **[03-scripts.md](03-scripts.md)** - All operational scripts documentation
+- **[04-daily-workflow.md](04-daily-workflow.md)** - Daily usage patterns and best practices
+- **[05-backup-system.md](05-backup-system.md)** - Backup, restore, and retention policies
 
-### System Information
-- **[system-requirements.md](system-requirements.md)** - Base OS, dependencies, and prerequisites
-- **[architecture.md](architecture.md)** - System architecture and service relationships
 
-## Quick Navigation
+## System Requirements
 
-### Getting Started
-1. Review [system-requirements.md](system-requirements.md) for prerequisites
-2. Understand the [architecture.md](architecture.md)
-3. Learn [Docker commands](01-docker-commands.md)
-4. Configure components: [PHP](02-php-configuration.md), [Nginx](03-nginx-configuration.md), [MariaDB](04-mariadb-configuration.md)
-5. Install [Dolibarr](05-dolibarr-installation.md)
+- **OS:** Ubuntu 24.04.2 LTS (GitHub Codespace)
+- **Docker:** 27.3.1+ with Docker Compose 2.29.7+
+- **Memory:** 4GB+ recommended
+- **Storage:** 10GB+ for application + backups
 
-### Having Issues?
-Check [06-troubleshooting.md](06-troubleshooting.md) for common problems and solutions.
+## Architecture
 
-## Component Overview
-
-### Docker Services
 ```
-┌─────────────┐
-│   Nginx     │ :80 → :8080 (host)
-│   (web)     │
-└──────┬──────┘
-       │ FastCGI :9000
-       ↓
-┌─────────────┐
-│  PHP-FPM    │
-│   (app)     │
-└──────┬──────┘
-       │ MySQL Protocol :3306
-       ↓
-┌─────────────┐
-│  MariaDB    │ :3306 → :3306 (host)
-│   (db)      │
-└─────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                     GitHub Codespace                        │
+│  ┌─────────────────────────────────────────────────────────┐ │
+│  │                Docker Environment                       │ │
+│  │                                                         │ │
+│  │  ┌──────────┐  ┌──────────────┐  ┌─────────────────┐   │ │
+│  │  │   Web    │  │     App      │  │    Database     │   │ │
+│  │  │  Nginx   │◄─┤  PHP 8.2-FPM │◄─┤  MariaDB 10.11 │   │ │
+│  │  │ :80      │  │   Dolibarr   │  │   UTF8MB4       │   │ │
+│  │  └──────────┘  └──────────────┘  └─────────────────┘   │ │
+│  │       ▲               ▲                    ▲            │ │
+│  │       │               │                    │            │ │
+│  │  ┌────┴─────┐  ┌──────┴─────┐  ┌─────────┴──────┐     │ │
+│  │  │ nginx_   │  │dolibarr_   │  │   dolibarr_    │     │ │
+│  │  │ config   │  │documents   │  │   database     │     │ │
+│  │  └──────────┘  └────────────┘  └────────────────┘     │ │
+│  └─────────────────────────────────────────────────────────┘ │
+│                             ▲                                │
+│                    ┌────────┴─────────┐                     │
+│                    │  Host Port 8080  │                     │
+│                    └──────────────────┘                     │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-### Volumes
-- `mariadb_data` - Database persistent storage
-- `dolibarr_documents` - Document/file storage
-- `../htdocs` - Application code (bind mount)
+## Key Features
 
-## Environment
+### Smart Configuration
+- Auto-detects Docker environment
+- Configures database connections automatically  
+- Sets appropriate paths for Codespace environment
+- No manual configuration required
 
-- **Base OS**: Debian Bookworm 12
-- **PHP**: 8.2-fpm
-- **Web Server**: Nginx stable-alpine
-- **Database**: MariaDB 10.11
-- **Container Runtime**: Docker with Docker Compose V2
+### Backup System
+- **Retention Policy:** 3 recent backups + 1 permanent blank backup
+- **Automatic cleanup** of old backups
+- **Complete backups** include database, documents, and configuration
+- **One-command restore** capability
 
-## Quick Commands Reference
+### Daily Workflow
+- **Safe startup** with health checks (`daily_start.sh`)
+- **Safe exit** with automatic backup (`daily_exit.sh`)
+- **Status monitoring** and validation
+- **Error detection** and reporting
 
-### Start Everything
-```bash
-docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml up -d
-```
+### Security Features
+- Proper file permissions and ownership
+- Secure database configuration
+- Isolated Docker containers
+- Regular backup validation
 
-### Stop Everything
-```bash
-docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml down
-```
+## Getting Help
 
-### View Logs
-```bash
-docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml logs -f
-```
-
-### Check Status
-```bash
-docker compose -f /workspaces/dolibarr/docker-deploy/docker-compose.yml ps
-```
-
-## File Locations
-
-### Configuration Files
-- `/workspaces/dolibarr/docker-deploy/Dockerfile` - PHP-FPM image definition
-- `/workspaces/dolibarr/docker-deploy/docker-compose.yml` - Service orchestration
-- `/workspaces/dolibarr/docker-deploy/nginx.conf` - Nginx configuration
-- `/workspaces/dolibarr/htdocs/conf/conf.php` - Dolibarr configuration (created by installer)
-
-### Data Directories
-- `/workspaces/dolibarr/htdocs/` - Dolibarr application files
-- Docker volumes managed by Docker Compose
+1. Review logs: `docker compose logs -f`
+2. Check container status: `docker compose ps`
+4. Verify configuration template in `/workspaces/dolibarr/htdocs/conf/conf.php.example`
 
 ## Version Information
 
-- **Dolibarr**: 23.0.0-alpha
-- **Documentation Date**: October 27, 2025
-- **Last Updated By**: aummind
-
----
-
-For detailed information on any component, see the individual documentation files listed above.
+- **Creation Date:** October 27, 2025
+- **Docker Version:** 27.3.1+
+- **Docker Compose:** 2.29.7+
+- **PHP Version:** 8.2.24-FPM
+- **MariaDB Version:** 10.11.8
+- **Nginx Version:** 1.26.2-Alpine
+- **Dolibarr:** Latest stable (configured via auto-setup)
