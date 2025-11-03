@@ -177,20 +177,27 @@ if ($action == 'updatemode') {
 	}
 }
 
-if ($action == 'update2') {
+if ($action == 'update') {
 	$error = 0;
 
 	foreach ($list as $constname) {
 		$constvalue = GETPOST($constname, 'alpha');
+
 		if (!dolibarr_set_const($db, $constname, $constvalue, 'chaine', 0, '', $conf->entity)) {
 			$error++;
 		}
 	}
-	if ($error) {
+
+	if (!$error) {
+		setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
+	} else {
 		setEventMessages($langs->trans("Error"), null, 'errors');
 	}
+}
 
-	// option in section binding
+if ($action == 'update_binding') {
+	$error = 0;
+
 	foreach ($list_binding as $constname) {
 		$constvalue = GETPOST($constname, 'alpha');
 
@@ -203,15 +210,40 @@ if ($action == 'update2') {
 		}
 	}
 
-	// options in section other
+	if (!$error) {
+		setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
+	} else {
+		setEventMessages($langs->trans("Error"), null, 'errors');
+	}
+}
+
+if ($action == 'update_advanced') {
+	$error = 0;
+
 	if (GETPOSTISSET('ACCOUNTING_LETTERING_NBLETTERS')) {
 		if (!dolibarr_set_const($db, 'ACCOUNTING_LETTERING_NBLETTERS', GETPOST('ACCOUNTING_LETTERING_NBLETTERS'), 'chaine', 0, '', $conf->entity)) {
 			$error++;
 		}
 	}
 
+	if (!$error) {
+		setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
+	} else {
+		setEventMessages($langs->trans("Error"), null, 'errors');
+	}
+}
+
+if ($action == 'update_export') {
+	$error = 0;
+
 	// Export options
 	$modelcsv = GETPOSTINT('ACCOUNTING_EXPORT_MODELCSV');
+
+	if (!$error) {
+		// reload
+		$configuration = $accountancyexport->getTypeConfig();
+		$listparam = $configuration['param'];
+	}
 
 	if (!empty($modelcsv)) {
 		if (!dolibarr_set_const($db, 'ACCOUNTING_EXPORT_MODELCSV', $modelcsv, 'chaine', 0, '', $conf->entity)) {
@@ -241,12 +273,6 @@ if ($action == 'update2') {
 				$error++;
 			}
 		}
-	}
-
-	if (!$error) {
-		// reload
-		$configuration = $accountancyexport->getTypeConfig();
-		$listparam = $configuration['param'];
 	}
 
 	if (!$error) {
@@ -483,20 +509,19 @@ if (getDolGlobalInt('MAIN_FEATURES_LEVEL') >= 1) {
 	print '</form>';
 
 
-	print '<br><br><br>';
+	print '<br><br>';
 }
 
 
 // Show form for main parameters
 print $formSetup->generateOutput(true);
 
-
-print '<br><br><br>';
+print '<br><br>';
 
 
 print '<form action="'.$_SERVER["PHP_SELF"].'" method="post">';
 print '<input type="hidden" name="token" value="'.newToken().'">';
-print '<input type="hidden" name="action" value="update2">';
+print '<input type="hidden" name="action" value="update_binding">';
 print '<input type="hidden" name="page_y" value="">';
 
 // Binding params
@@ -631,7 +656,8 @@ print '</tr>';
 print '</table>';
 print '</div>';
 
-print '<div class="center"><input type="submit" class="button reposition" value="'.dol_escape_htmltag($langs->trans('Save')).'" name="button"></div>';
+print '<div class="center"><input type="submit" class="button button-edit reposition" name="button" value="'.dol_escape_htmltag($langs->trans('Save')).'"></div>';
+print '</form>';
 
 
 // Show numbering options
@@ -757,7 +783,7 @@ print '<br><br><br>';
 // Advanced params
 print '<form action="'.$_SERVER["PHP_SELF"].'" method="post">';
 print '<input type="hidden" name="token" value="'.newToken().'">';
-print '<input type="hidden" name="action" value="update2">';
+print '<input type="hidden" name="action" value="update_advanced">';
 print '<input type="hidden" name="page_y" value="">';
 
 print '<div class="div-table-responsive-no-min">';
@@ -847,12 +873,17 @@ print '</div>';
 
 
 print '<div class="center"><input type="submit" class="button button-edit reposition" name="button" value="'.$langs->trans('Save').'"></div>';
+print '</form>';
 
 
 print '<br><br><br>';
 
 
 // Export options
+print '<form action="'.$_SERVER["PHP_SELF"].'" method="post">';
+print '<input type="hidden" name="token" value="'.newToken().'">';
+print '<input type="hidden" name="action" value="update_export">';
+print '<input type="hidden" name="page_y" value="">';
 
 print "\n".'<script type="text/javascript">'."\n";
 print 'jQuery(document).ready(function () {'."\n";
@@ -897,8 +928,6 @@ print '        initfields();'."\n";
 print '    });'."\n";
 print '})'."\n";
 print '</script>'."\n";
-
-// Main Options
 
 print '<table class="noborder centpercent">';
 print '<tr class="liste_titre">';
@@ -960,7 +989,6 @@ if ($num2) {
 }
 
 print '<div class="center"><input type="submit" class="button reposition" value="'.dol_escape_htmltag($langs->trans('Save')).'" name="button"></div>';
-
 
 print '</form>';
 
