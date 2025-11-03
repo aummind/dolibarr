@@ -1,0 +1,15 @@
+label,parent_label,description
+SOLVENT,Laboratory,"Solvents - Organic and inorganic volatile compounds, water"
+CHEMICAL,Laboratory,Chemicals - Pure and/or compounded
+RESIN,Laboratory,Resins - Thermoplastic thermosetting functional bio-sourced oils etc
+POLYMERS,Laboratory,Polymers - Synthetic natural modified polymers
+FORMULATED,Laboratory,Formulated Products - Ready-to-use solutions custom blends
+OTHERS,Laboratory,Other materials - Gases desiccants etc
+PIGMENTS,Laboratory,Pigments and Dyes - Organic/inorganic pigments dyes
+FILLER,Laboratory,Fillers - Mineral organic reinforcing fillers others
+ADDITIVE,Laboratory,Additives - Processing aids performance enhancers property modifiers dispersing agents wetting agents defoamers surface tension modifiers deaerators
+FUNCTIONAL,Laboratory,Functional Fillers - Electrical flame retardant thermal optical
+PAINTS,Laboratory,Paints and Coatings - Paints protective coatings
+LUBRICANTS,Laboratory,Chemical Lubricants - Lubricants greases
+SAMPLE,Laboratory,"Materials for trials, testing and analysis"
+
