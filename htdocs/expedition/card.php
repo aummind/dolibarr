@@ -1246,15 +1246,44 @@ if ($action == 'create') {
 			print "</td></tr>\n";
 		}
 
-		// Other attributes. Fields from hook formObjectOptions and Extrafields.
-		// $objectsrc is Commande|Facture
-		$objectsav = $object;	// Because Expedition is $expe and not $object that is wrongly a duplicate of $objectsrc.
-		$object = $expe;
-		// Propagate extrafieldsvalue from source object to shipment object
-		if (isset($extrafields->attributes[$object->table_element]['label']) && is_array($extrafields->attributes[$object->table_element]['label']) && !empty($extrafields->attributes[$object->table_element]['label'])) {
-			foreach ($extrafields->attributes[$object->table_element]['label'] as $key => $val) {
-				if (array_key_exists('options_'.$key, $objectsav->array_options)) {  // We take value from order only if extrafield has the same name/key.
-					$object->array_options['options_'.$key] = $objectsav->array_options['options_'.$key];
+			// Tracking number
+			print "<tr><td>".$langs->trans("TrackingNumber")."</td>";
+			print '<td colspan="3">';
+			print img_picto('', 'barcode', 'class="pictofixedwidth"');
+			print '<input name="tracking_number" size="20" value="'.GETPOST('tracking_number', 'alpha').'">';
+			print "</td></tr>\n";
+
+			// Incoterms
+			if (isModEnabled('incoterm')) {
+				print '<tr>';
+				print '<td><label for="incoterm_id">'.$form->textwithpicto($langs->trans("IncotermLabel"), $object->label_incoterms, 1).'</label></td>';
+				print '<td colspan="3" class="maxwidthonsmartphone">';
+				print img_picto('', 'incoterm', 'class="pictofixedwidth"');
+				print $form->select_incoterms((!empty($object->fk_incoterms) ? $object->fk_incoterms : ''), (!empty($object->location_incoterms) ? $object->location_incoterms : ''));
+				print '</td></tr>';
+			}
+
+			// Document model
+			include_once DOL_DOCUMENT_ROOT.'/core/modules/expedition/modules_expedition.php';
+			$list = ModelePdfExpedition::liste_modeles($db);
+			if (is_countable($list) && count($list) > 1) {
+				print "<tr><td>".$langs->trans("DefaultModel")."</td>";
+				print '<td colspan="3">';
+				print img_picto('', 'pdf', 'class="pictofixedwidth"');
+				print $form->selectarray('model', $list, getDolGlobalString('EXPEDITION_ADDON_PDF'), 0, 0, 0, '', 0, 0, 0, '', 'widthcentpercentminusx');
+				print "</td></tr>\n";
+			}
+
+			// Other attributes. Fields from hook formObjectOptions and Extrafields.
+			// $objectsrc is Commande|Facture
+			$objectsav = $object;	// Because Expedition is $expe and not $object that is wrongly a duplicate of $objectsrc.
+			$object = $expe;
+			// Propagate extrafieldsvalue from source object to shipment object
+			if (isset($extrafields->attributes[$object->table_element]['label'])) {
+				foreach ($extrafields->attributes[$object->table_element]['label'] as $key => $val) {
+					if (array_key_exists('options_' . $key, $objectsav->array_options)) {  // We take value from order only if extrafield has the same name/key.
+						$object->array_options['options_' . $key] = $objectsav->array_options['options_' . $key];
+					}
 				}
 			}
 		}
