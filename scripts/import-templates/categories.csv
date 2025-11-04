@@ -32,7 +32,7 @@ SPARES,MAINTENANCE,Spare Parts - Mechanical electrical instrumentation parts
 TOOLS,MAINTENANCE,Tools - Mechanical tool machining kits speciality
 CONSUMABLES,MAINTENANCE,Maintenance Consumables - Filters gaskets seals  grinding media
 EQUIPMENT,SAFETY,Safety Equipment - Fire systems emergency showers ventilation
-CONSUMABLES-S,SAFETY,Safety Consumables - First aid spill kits absorbents
+CONSUMABLES,SAFETY,Safety Consumables - First aid spill kits absorbents
 PROTECTIVE,SAFETY,Protective Gear - PPE respiratory protection eye protection
 CHEMICALS,SAFETY,Safety Chemicals - Neutralizers emergency response chemicals
 
