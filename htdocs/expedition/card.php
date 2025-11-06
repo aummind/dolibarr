@@ -2029,7 +2029,7 @@ if ($action == 'create' && $usercancreate) {
 
 					// Qty to ship
 					$quantityAsked = $line->qty;
-					if ($line->product_type == 1 && !getDolGlobalString('STOCK_SUPPORTS_SERVICES') && !getDolGlobalString('SHIPMENT_SUPPORTS_SERVICES')) {
+					if ($line->product_type == Product::TYPE_SERVICE && !getDolGlobalString('STOCK_SUPPORTS_SERVICES') && !getDolGlobalString('SHIPMENT_SUPPORTS_SERVICES')) {
 						$quantityToBeDelivered = 0;
 					} else {
 						if (is_numeric($quantityDelivered)) {
@@ -2536,7 +2536,7 @@ if ($action == 'create' && $usercancreate) {
 
 							print '<td class="left">';
 							if ($line->product_type == Product::TYPE_PRODUCT || getDolGlobalString('STOCK_SUPPORTS_SERVICES')) {
-								if ($warehouse_selected_id > 0) {
+								if ($warehouse_selected_id > 0 && $product->stockable_product == Product::ENABLED_STOCK) {
 									$warehouseObject = new Entrepot($db);
 									$warehouseObject->fetch($warehouse_selected_id);
 									print img_warning() . ' ' . $langs->trans("NoProductToShipFoundIntoStock", $warehouseObject->label);
