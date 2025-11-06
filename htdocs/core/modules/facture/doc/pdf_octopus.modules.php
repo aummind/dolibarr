@@ -2907,7 +2907,7 @@ class pdf_octopus extends ModelePDFFactures
 				'textkey' => 'S'.$derniere_situation->situation_counter . ' - ' . dol_print_date($derniere_situation->date, "%d/%m/%Y"),
 				'align' => 'C',
 				'padding' => array(0.5,0.2,0.5,0.2), // Like css 0 => top, 1 => right, 2 => bottom, 3 => left
-				'width' => 10 + 15 //current width + amount cell width
+				'width' => 10 + 18 //current width + amount cell width
 			),
 		);
 		if ($this->situationinvoice && ! empty($this->TDataSituation['date_derniere_situation'])) {
@@ -2918,7 +2918,7 @@ class pdf_octopus extends ModelePDFFactures
 		$rank += 10;
 		$this->cols['prev_progress_amount'] = array(
 			'rank' => $rank,
-			'width' => 15, // in mm
+			'width' => 18, // in mm
 			'status' => false,
 			'title' => array(
 				'textkey' => $outputlangs->transnoentities('Amount')
@@ -2943,7 +2943,7 @@ class pdf_octopus extends ModelePDFFactures
 				'textkey' => 'S'.$object->situation_counter . ' - ' . dol_print_date($object->date, "%d/%m/%Y"),
 				'align' => 'C',
 				'padding' => array(0.5,0.2,0.5,0.2), // Like css 0 => top, 1 => right, 2 => bottom, 3 => left
-				'width' => 10 + 15
+				'width' => 10 + 18
 			),
 		);
 
@@ -2951,7 +2951,7 @@ class pdf_octopus extends ModelePDFFactures
 		$rank += 10;
 		$this->cols['progress_amount'] = array(
 			'rank' => $rank,
-			'width' => 15, // in mm
+			'width' => 18, // in mm
 			'status' => true,
 			'title' => array(
 				'textkey' => $outputlangs->transnoentities('Amount')
