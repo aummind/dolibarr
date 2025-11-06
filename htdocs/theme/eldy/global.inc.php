@@ -370,7 +370,7 @@ input, input.flat, form.flat select, select, select.flat, .dataTables_length lab
 }
 input, input.flat, textarea, textarea.flat, form.flat select, select, select.flat, .dataTables_length label select {
 	color: var(--colortext);
-	border-radius: 3px;
+	border-radius: 5px;
 	font-family: <?php print $fontlist ?>;
 	outline: none;
 	margin: 0px 0px 0px 0px;
@@ -383,7 +383,6 @@ input, input.flat, textarea, textarea.flat, form.flat select, select, select.fla
 .liste_titre input, .liste_titre select {
 	border: none;
 	border<?php echo !getDolGlobalString('THEME_SHOW_BORDER_ON_INPUT') ? '-bottom' : ''; ?>: solid 1px var(--inputbordercolor);
-	/* padding: 5px; */
 }
 .divadvancedsearchfieldcompinput,
 div.tabBar input, div.tabBar input.flat, div.tabBar textarea, div.tabBar textarea.flat, div.tabBar form.flat select, div.tabBar select, div.tabBar select.flat, div.tabBar .dataTables_length label select
