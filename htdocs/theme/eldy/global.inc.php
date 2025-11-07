@@ -412,7 +412,7 @@ input[type=submit], input[type=submit]:hover {
 	margin-left: 5px;
 }
 input[type=checkbox], input[type=radio] {
-	margin: 0 5px 0 1px;
+	margin: 0 5px 1px 1px;
 	transform: scale(1.25);
 }
 
