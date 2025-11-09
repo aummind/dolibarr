@@ -120,8 +120,7 @@ foreach ($dirModCaptcha as $dirroot) {
 		closedir($handle);
 	}
 }
-dol_sort_array($arrayhandler, 'position');
-var_dump($arrayhandler);
+$arrayhandler = dol_sort_array($arrayhandler, 'position');
 
 
 print '<form action="'.$_SERVER["PHP_SELF"].'" method="POST">';
@@ -255,7 +254,7 @@ if ($showavailablecaptcha) {
 	print '<div class="div-table-responsive">';
 	print '<table class="noborder centpercent">';
 	print '<tr class="liste_titre">';
-	print '<td colspan="2">'.$langs->trans("Captcha").'</td>';
+	print '<td colspan="3">'.$langs->trans("Captcha").'</td>';
 	print '<td>'.$langs->trans("Example").'</td>';
 	print '<td class="right" width="100">'.$langs->trans("Status").'</td>';
 	print '</tr>';
@@ -263,8 +262,10 @@ if ($showavailablecaptcha) {
 	// Loop on each available captcha
 	foreach ($arrayhandler as $key => $module) {
 		print '<tr class="oddeven">';
+		print '<td style="width: 26px" class="center">';
+		print img_picto('', $module->picto, 'class="width25 size15x"');
+		print '</td>';
 		print '<td>';
-		print img_picto('', $module->picto, 'class="width25 size15x marginrightonly"').' ';
 		print ucfirst($key);
 		print '</td>';
 		print '<td>';
