@@ -336,4 +336,7 @@ ALTER TABLE llx_accounting_bookkeeping ADD COLUMN matching_general tinyint DEFAU
 ALTER TABLE llx_accounting_bookkeeping_tmp ADD COLUMN matching_general tinyint DEFAULT 0 NOT NULL AFTER multicurrency_code;
 
 ALTER TABLE llx_societe MODIFY COLUMN mode_reglement integer;
+
+ALTER TABLE llx_blockedlog DROP COLUMN signature_line;
+
 -- end of migration
