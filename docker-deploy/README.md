@@ -148,6 +148,12 @@ docker-deploy/project/redis_toggle.sh enable
 docker-deploy/project/redis_toggle.sh disable
 ```
 
+## Reports (deprecated directory)
+
+The previous `docker-deploy/reports/` directory has been removed. Generated artifacts and audits, when needed, are emitted on-demand by helper scripts into `docker-deploy/debug_info/` (which is not committed and may be recreated by scripts such as `scripts/security/audit.sh` and `scripts/security/secret-scan.sh`).
+
+For compliance/license traces, use the publishable `coos_backup/` assembled automatically by `daily_exit.sh` or manually via `docker-deploy/project/backup_coos.sh`.
+
 ## Quick diagnostics
 
 Use these checks when something feels off:
