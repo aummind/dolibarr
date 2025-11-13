@@ -46,7 +46,7 @@ A sample hardened snippet is provided at `docker-deploy/security/nginx.hardening
 - Run `scripts/security/secret-scan.sh` for simple pattern-based secret detection (non-official).
 
 ## Backups
-- Use `scripts/backup_coos.sh` to assemble a compliance-oriented backup in `coos_backup/`.
+- Use `docker-deploy/project/backup_coos.sh` to assemble a compliance-oriented backup in `coos_backup/` (ignored by default; publish to a separate compliance repo if needed).
 
 ## Incident response (non-official reference)
 - Enable access logs with request IDs.
