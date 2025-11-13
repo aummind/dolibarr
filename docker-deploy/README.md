@@ -142,10 +142,10 @@ docker compose restart app
 ### Enable/Disable Redis-backed PHP sessions (optional)
 ```bash
 # Enable Redis sessions (writes htdocs/.user.ini)
-scripts/project/redis_toggle.sh enable
+docker-deploy/project/redis_toggle.sh enable
 
 # Disable (revert to file-based sessions)
-scripts/project/redis_toggle.sh disable
+docker-deploy/project/redis_toggle.sh disable
 ```
 
 ## Quick diagnostics

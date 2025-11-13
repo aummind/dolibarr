@@ -66,10 +66,10 @@ fi
 
 # Assemble compliance/OSS backup (coos_backup) – non-blocking
 log "📚 Assembling compliance backup (coos_backup)..."
-if /usr/bin/env bash -c '/workspaces/dolibarr/scripts/project/backup_coos.sh'; then
+if /usr/bin/env bash -c 'bash /workspaces/dolibarr/docker-deploy/project/backup_coos.sh'; then
     log "✅ coos_backup assembled."
 else
-    warn "⚠️ coos_backup assembly failed (non-blocking). Check scripts/project/backup_coos.sh."
+    warn "⚠️ coos_backup assembly failed (non-blocking). Check docker-deploy/project/backup_coos.sh."
 fi
 
 # Show backup info

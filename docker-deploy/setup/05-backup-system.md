@@ -121,17 +121,17 @@ This enforces a single canonical `_BLANK` policy to keep one trusted baseline.
 
 ### Smart Retention System
 
-The system maintains **exactly 4 backups**:
+By default, the system preserves:
 
-1. **1 Blank Backup** (oldest, permanent)
-   - Your clean installation state
-   - Never deleted automatically
-   - Identified as oldest backup in retention logic
+1. **Canonical `_BLANK` backup** (permanent)
+   - Clean working baseline; protected from deletion
+   - Created or promoted via `./mark_blank_backup.sh` (or replace policy below)
 
-2. **3 Recent Backups** (rolling window)
-   - Most recent daily backups
-   - Contains all business data
-   - Older backups beyond 3 are deleted
+2. **Last 3 non-protected backups** (rolling)
+   - Most recent operational backups with business data
+   - Older non-protected backups beyond 3 are deleted automatically
+
+Additional backups you explicitly mark as protected (drop a `.protected` file) are always preserved.
 
 ### Retention Logic Flow
 
@@ -186,7 +186,32 @@ backups/
 ├── dolibarr_backup_20251029_180000/        ← 2nd daily backup  
 └── dolibarr_backup_20251030_180000/        ← 1st daily backup (newest)
 ```
-*Note: The 20251027 backup was removed as it was neither newest 3 nor oldest.*
+*Note: The 20251027 backup was removed as it was neither among the newest 3 nor protected. The `_BLANK` backup remains preserved.*
+
+### Replace Blank Backup With Current Snapshot (Canonical)
+
+To promote your most recent backup as the canonical `_BLANK` and remove all other non-protected backups in one go:
+
+```bash
+cd /workspaces/dolibarr/docker-deploy/backups
+
+latest="$(ls -1dt dolibarr_backup_* | head -1)" || { echo "No backups"; exit 1; }
+base="$(echo "$latest" | sed -E 's/_BLANK([0-9]+)?$//')"
+keep="${base}_BLANK"
+[ "$latest" != "$keep" ] && mv "$latest" "$keep" || true
+: > "$keep/.protected"
+cat > "$keep/BLANK_BACKUP_INFO.txt" <<EOF
+DOLIBARR BLANK BACKUP (canonical)
+=================================
+Created: $(date)
+Directory: $keep
+Purpose: Clean working baseline to restore to a known-good state.
+EOF
+for d in dolibarr_backup_*; do [ "$d" = "$keep" ] || rm -rf -- "$d"; done
+ls -ld "$keep"
+```
+
+This enforces a single canonical `_BLANK` policy to keep one trusted baseline plus your last three non-protected operational backups.
 
 ## Backup Creation Process
 
@@ -200,9 +225,10 @@ backups/
 3. **Document backup:** Archive all files with compression
 4. **Configuration backup:** Save current settings
 5. **Metadata creation:** Generate backup information file
-6. **Retention management:** Clean up old backups per policy
-7. **Validation:** Verify backup integrity
-8. **Container shutdown:** Stop services safely
+6. **Compliance backup (coos_backup):** Assemble publishable manifest and trace
+7. **Retention management:** Clean up old backups per policy
+8. **Validation:** Verify backup integrity
+9. **Container shutdown:** Stop services safely
 
 **Sample Execution:**
 ```bash
@@ -356,6 +382,20 @@ Total Backup Size: 17.4MB
 Creation Duration: 45 seconds
 Integrity: Verified ✓
 ```
+
+## Compliance Backup (coos_backup)
+
+The compliance-oriented backup is a lightweight, publishable directory containing license and trace documents for open-source compliance:
+
+- Location: `coos_backup/`
+- Contains: `MANIFEST.md`, `TRACE.md`, and convenience copies of `COPYING`, `COPYRIGHT`, `ChangeLog` when available
+- Purpose: Shareable evidence of licensing and high-level modifications (no business data)
+
+Creation/refresh:
+- Automatic: As part of `./daily_exit.sh` (non-blocking; logs a warning if it fails)
+- Manual: `docker-deploy/project/backup_coos.sh`
+
+You can commit `coos_backup/` to a separate compliance repository if desired.
 
 ## Restore System
 
