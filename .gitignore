@@ -82,6 +82,7 @@ coos_backup/
 
 # Local session files (Codespaces helpers)
 session-log.txt
+docker-deploy/vscode-shortcuts.json
 
 # Local phpstan configuration
 /phpstan.neon
