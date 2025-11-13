@@ -31,6 +31,9 @@ You should see:
 - `backup_dolibarr.sh` - Backup script
 - `restore_dolibarr.sh` - Restore script
 - `mark_blank_backup.sh` - Blank backup marker
+ - `make_blank_backup.sh` - Create a labeled blank backup (e.g., BLANK02)
+ - `uninstall_app.sh` - Reset app to uninstalled state (removes DB/docs volumes)
+ - `first_install.sh` - Bring stack up and check conf.php, documents dir, install.lock
 
 ## Step 2: Start the System
 
@@ -49,6 +52,14 @@ This script will:
 ```bash
 docker compose up -d
 ```
+
+### 2.2.1 First-Install Helper (optional)
+For a guided first install with checks and optional auto-setup:
+```bash
+./first_install.sh --auto-conf --unlock --open
+```
+This will copy `conf.php.example` if missing, remove `install.lock` if present,
+ensure the documents directory is ready inside the container, and open the installer.
 
 ### 2.3 Verify Containers Are Running
 ```bash
@@ -90,10 +101,6 @@ Use these **exact** database settings:
 | **Database Password** | `dolibarrpass` |
 | **Database Port** | `3306` |
 | **Database Prefix** | `llx_` |
-
-Character set and collation (recommended):
-- Character set: utf8mb4
-- Collation: utf8mb4_unicode_ci
 
 ### 4.3 Administrator Account
 Create your admin account:
@@ -243,32 +250,9 @@ netstat -tuln | grep 8080
 netstat -tuln | grep 3306
 ```
 
-### See login page instead of installer (reset to installer)
-If you reach the Dolibarr login page but want to run the first-install wizard, it means a `conf/conf.php` already exists. Reset safely as follows:
-
-```bash
-# 1) Restore the BLANK snapshot (resets DB + documents to a clean state)
-printf 'y\n' | /workspaces/dolibarr/docker-deploy/restore_dolibarr.sh \
-   /workspaces/dolibarr/docker-deploy/backups/dolibarr_backup_20251031_120719_BLANK
-
-# 2) Remove conf.php to re-enable the installer
-rm -f /workspaces/dolibarr/htdocs/conf/conf.php
-
-# 3) Ensure install.lock is not present
-docker compose exec app sh -lc 'rm -f /var/www/html/documents/install.lock || true'
-
-# 4) Open installer
-"$BROWSER" http://localhost:8080/install/
-```
-
-Notes:
-- The BLANK restore recreates the database with utf8mb4/utf8mb4_unicode_ci.
-- During the wizard, keep DB host `db`, user `dolibarr`, pass `dolibarrpass`.
-- On completion, Dolibarr will create `install.lock` automatically; keep it for security.
-
 ### Getting Help
 
-1. Check logs: `docker-compose logs -f [service]`
+1. Check logs: `docker compose logs -f [service]`
 2. Check container status: `docker compose ps`
 3. Review configuration: `cat /workspaces/dolibarr/htdocs/conf/conf.php.example` (template) or `cat /workspaces/dolibarr/htdocs/conf/conf.php` (active after install)
 4. See Getting Help in [setup/README.md](README.md) for quick diagnostics

@@ -1,0 +1,26 @@
+Dolibarr Docker Backup Information
+=====================================
+Backup Date: Thu Nov 13 06:34:22 UTC 2025
+Backup Directory: /workspaces/dolibarr/docker-deploy/backups/dolibarr_backup_20251113_063421
+Hostname: codespaces-fb3af9
+User: codespace
+
+Software Versions:
+- Docker: Docker version 28.3.1-1, build 38b7060a218775811da953650d8df7d492653f8f
+- Docker Compose: Docker Compose version v2.38.2
+- PHP: PHP 8.2.29 (cli) (built: Nov  4 2025 00:25:14) (NTS)
+- MariaDB: mysql  Ver 15.1 Distrib 10.11.14-MariaDB, for debian-linux-gnu (x86_64) using  EditLine wrapper
+
+Container Status at Backup Time:
+NAME                    IMAGE                 COMMAND                  SERVICE   CREATED         STATUS         PORTS
+docker-deploy-app-1     docker-deploy-app     "docker-php-entrypoi…"   app       4 minutes ago   Up 4 minutes   9000/tcp
+docker-deploy-db-1      mariadb:10.11         "docker-entrypoint.s…"   db        4 minutes ago   Up 4 minutes   0.0.0.0:3306->3306/tcp, [::]:3306->3306/tcp
+docker-deploy-redis-1   redis:7-alpine        "docker-entrypoint.s…"   redis     4 minutes ago   Up 4 minutes   6379/tcp
+docker-deploy-web-1     nginx:stable-alpine   "/docker-entrypoint.…"   web       4 minutes ago   Up 4 minutes   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp
+
+Database Size: 644K
+Documents Size: 1.7M
+Total Backup Size: 2.4M
+
+Restore Command:
+./restore_dolibarr.sh "/workspaces/dolibarr/docker-deploy/backups/dolibarr_backup_20251113_063421"

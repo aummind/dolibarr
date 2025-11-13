@@ -1,0 +1,5 @@
+DOLIBARR BLANK BACKUP (canonical)
+=================================
+Created: Thu Nov 13 07:14:06 UTC 2025
+Directory: dolibarr_backup_20251113_063421_BLANK
+Purpose: Clean working baseline to restore to a known-good state.

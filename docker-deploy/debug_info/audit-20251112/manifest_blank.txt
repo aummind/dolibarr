@@ -1,0 +1,7 @@
+/workspaces/dolibarr/docker-deploy/backups/dolibarr_backup_20251031_120719_BLANK
+/workspaces/dolibarr/docker-deploy/backups/dolibarr_backup_20251031_120719_BLANK/documents.tar.gz
+/workspaces/dolibarr/docker-deploy/backups/dolibarr_backup_20251031_120719_BLANK/BLANK_BACKUP_INFO.txt
+/workspaces/dolibarr/docker-deploy/backups/dolibarr_backup_20251031_120719_BLANK/config
+/workspaces/dolibarr/docker-deploy/backups/dolibarr_backup_20251031_120719_BLANK/config/conf.php
+/workspaces/dolibarr/docker-deploy/backups/dolibarr_backup_20251031_120719_BLANK/.protected
+/workspaces/dolibarr/docker-deploy/backups/dolibarr_backup_20251031_120719_BLANK/database.sql

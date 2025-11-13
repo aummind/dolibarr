@@ -50,9 +50,9 @@ main() {
     fi
     
     # Check if containers are running
-    if ! docker-compose ps | grep -q "Up"; then
+    if ! docker compose ps | grep -q "Up"; then
         warn "Containers don't appear to be running. Starting them first..."
-        docker-compose up -d
+        docker compose up -d
         sleep 10
     fi
     
@@ -68,12 +68,12 @@ main() {
     
     # Backup database
     log "📊 Backing up database (blank state)..."
-    docker-compose exec -T db mysqldump -u root -p"rootpassword" --routines --triggers dolibarr > "$BACKUP_DIR/database.sql"
+    docker compose exec -T db mysqldump -u root -p"rootpassword" --routines --triggers dolibarr > "$BACKUP_DIR/database.sql"
     
     # Backup documents directory
     log "📁 Backing up documents directory (should be mostly empty)..."
-    if docker-compose exec app test -d /var/www/html/documents; then
-        docker-compose exec -T app tar -czf - -C /var/www/html documents > "$BACKUP_DIR/documents.tar.gz"
+    if docker compose exec app test -d /var/www/html/documents; then
+        docker compose exec -T app tar -czf - -C /var/www/html documents > "$BACKUP_DIR/documents.tar.gz"
     else
         warn "Documents directory not found, creating empty archive"
         touch "$BACKUP_DIR/documents.tar.gz"
@@ -82,8 +82,8 @@ main() {
     # Backup configuration
     log "⚙️ Backing up configuration files..."
     mkdir -p "$BACKUP_DIR/config"
-    if docker-compose exec app test -f /var/www/html/conf/conf.php; then
-        docker-compose exec -T app cat /var/www/html/conf/conf.php > "$BACKUP_DIR/config/conf.php"
+    if docker compose exec app test -f /var/www/html/conf/conf.php; then
+        docker compose exec -T app cat /var/www/html/conf/conf.php > "$BACKUP_DIR/config/conf.php"
     fi
     
     # Create marker file indicating this is a blank backup
@@ -125,23 +125,6 @@ EOF
     info "🔒 This backup will be preserved by the daily_exit.sh script"
     info "   (it keeps the oldest backup as the blank backup + 3 most recent)"
     echo ""
-    
-    # Update README with blank backup info
-    if [ -f "README.md" ]; then
-        if ! grep -q "BLANK BACKUP" README.md; then
-            echo "" >> README.md
-            echo "## Blank Backup Information" >> README.md
-            echo "" >> README.md
-            echo "**Blank Backup Created:** $(date)" >> README.md
-            echo "**Backup Name:** $BACKUP_NAME" >> README.md
-            echo "**Purpose:** Clean state backup for system reset" >> README.md
-            echo "" >> README.md
-            echo "This backup contains your Dolibarr installation immediately after setup," >> README.md
-            echo "before any business data was added. It's automatically preserved by" >> README.md
-            echo "the backup retention system." >> README.md
-            echo "" >> README.md
-        fi
-    fi
     
     success "🎉 Blank backup process completed!"
     echo ""

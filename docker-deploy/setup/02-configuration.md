@@ -1,174 +1,403 @@
-# Configuration Guide (clean)
+# Configuration Guide# Dolibarr Docker - Configuration Guide
 
-This guide explains how to configure the Docker-based Dolibarr stack. It references the live files in this repo and keeps examples consistent with the current compose and Dockerfile.
 
-Authoritative sources in this repo:
-- Compose: `docker-deploy/docker-compose.yml`
-- App image: `docker-deploy/Dockerfile`
-- Nginx: `docker-deploy/nginx.conf`
-- Security hardening (non-official): `docker-deploy/security/nginx.hardening.conf`
-- Healthchecks override: `docker-deploy/docker-compose.healthchecks.yml`
 
-## 1) PHP configuration (Dockerfile)
+Detailed configuration information for the Dolibarr Docker setup.## Overview
 
-Current defaults applied in the image:
-- memory_limit = 256M
-- max_execution_time = 300
-- date.timezone = UTC
+This guide covers customization and configuration options for your Dolibarr Docker deployment, including security, performance, and feature customization.
 
-Installed extensions (subset):
-- Core: pdo_mysql, mysqli, mbstring, intl, xml, soap, bcmath, zip, gd, imap, calendar, pcntl
-- PECL: imagick, redis (enabled)
+## Overview
 
-How to change PHP settings
-1) Edit `docker-deploy/Dockerfile` (e.g., memory_limit, upload/post sizes)
-2) Rebuild and restart:
-   - `cd docker-deploy`
-   - `docker compose build --no-cache app`
-   - `docker compose up -d`
+## Container Configuration
 
-Optional: enable OPcache for production
-```dockerfile
-RUN docker-php-ext-install opcache \
- && echo "opcache.enable=1" >> "$PHP_INI_DIR/php.ini" \
- && echo "opcache.memory_consumption=128" >> "$PHP_INI_DIR/php.ini" \
- && echo "opcache.max_accelerated_files=4000" >> "$PHP_INI_DIR/php.ini"
+This setup uses smart auto-configuration that adapts to the environment automatically. Manual configuration is rarely needed, but this guide explains how everything works.
+
+### PHP Configuration (Dockerfile)
+
+## Configuration Architecture
+
+#### Memory and Execution Limits
+
+```Current settings in Dockerfile:
+
+┌─────────────────────────────────────────────────────────────┐```dockerfile
+
+│                Configuration Flow                            │# Production PHP configuration with optimized settings
+
+├─────────────────────────────────────────────────────────────┤RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
+
+│                                                             │    && sed -i 's/memory_limit = 128M/memory_limit = 256M/' "$PHP_INI_DIR/php.ini" \
+
+│  conf.php.example  ──→  Auto-Detection  ──→  conf.php      │    && sed -i 's/max_execution_time = 30/max_execution_time = 300/' "$PHP_INI_DIR/php.ini" \
+
+│  (Template)              (Runtime)           (Active)       │    && sed -i 's/;date.timezone =/date.timezone = UTC/' "$PHP_INI_DIR/php.ini"
+
+│                                                             │```
+
+│  • Environment vars     • Docker check      • Database     │
+
+│  • Default values       • Path detection    • Paths        │**To customize these values:**
+
+│  • Security settings    • URL generation    • Security     │1. Edit the Dockerfile
+
+│                                                             │2. Rebuild the container: `docker compose build --no-cache app`
+
+└─────────────────────────────────────────────────────────────┘3. Restart: `docker compose up -d`
+
 ```
 
-## 2) Nginx configuration
+**Common customizations:**
 
-Base config: `docker-deploy/nginx.conf`
-- Serves `/var/www/html` with PHP via `app:9000`
-- Blocks access to `conf/` and dotfiles
-- You can raise upload size by adding inside `server {}`:
-  - `client_max_body_size 50M;`
+## Smart Configuration System```dockerfile
 
-Non-official hardening (optional): `docker-deploy/security/nginx.hardening.conf`
-- TLS ciphers/policies, HSTS, security headers, deny script execution in uploads, basic rate limits.
-- Review and adapt before production.
+# For large installations
 
-## 3) Compose services overview
+### Auto-Detection Featuressed -i 's/memory_limit = 256M/memory_limit = 512M/' "$PHP_INI_DIR/php.ini"
 
-Services (`docker-deploy/docker-compose.yml`):
-- web: `nginx:stable-alpine`, exposes 8080→80, mounts code and documents volume
-- app: PHP 8.2 FPM (built from Dockerfile), mounts code and documents
-- db: `mariadb:10.11`, publishes 3306 for local tools (remove in production)
-- redis: `redis:7-alpine`, internal only (no host port)
 
-Volumes
-- `mariadb_data`: DB persistence
-- `dolibarr_documents`: shared Dolibarr documents directory
 
-## 4) Sessions and Redis (optional)
+The `conf.php.example` file automatically detects:# For file uploads
 
-- Redis service and PHP Redis extension are included, but sessions default to file-based.
-- To enable Redis-backed PHP sessions (opt-in):
-  - `scripts/project/redis_toggle.sh enable`
-- To revert to file-based:
-  - `scripts/project/redis_toggle.sh disable`
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 50M/' "$PHP_INI_DIR/php.ini"
 
-The toggle writes `htdocs/.user.ini` with:
-```
-session.save_handler = redis
-session.save_path = "tcp://redis:6379?persistent=1&database=0&timeout=2&prefix=PHPSESSID:"
+1. **Environment Type:**sed -i 's/post_max_size = 8M/post_max_size = 50M/' "$PHP_INI_DIR/php.ini"
+
+   - Docker container environment
+
+   - GitHub Codespace setup# For long-running operations
+
+   - Local development setupsed -i 's/max_execution_time = 300/max_execution_time = 600/' "$PHP_INI_DIR/php.ini"
+
 ```
 
-## 5) Environment variables
+2. **Database Settings:**
 
-Use `project/ENV.sample` as a template and do not commit real secrets.
+   - Host: `db` (Docker service name)#### PHP Extensions
 
-Key variables
-- App: `APP_BASE_URL`, `TIMEZONE`
-- DB: `DOLI_DB_HOST`, `DOLI_DB_NAME`, `DOLI_DB_USER`, `DOLI_DB_PASS`
-- Bootstrap admin (first install only): `DOLI_ADMIN_USER`, `DOLI_ADMIN_PASS`
-- Mail: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`
-- Compliance: `COUNTRY=IN`, `STATE=KA`, `GST_ENABLED=1`, `KARNATAKA_RULES=1`
-- E-invoicing (commented placeholders): `GST_EINVOICE_ENABLED`, `EINVOICE_PROVIDER`, `EINVOICE_API_BASE`, credentials
-- Redis: `REDIS_HOST=redis`, `REDIS_PORT=6379` (feature toggled via script above)
+   - Database: `dolibarr`Current extensions in Dockerfile:
 
-## 6) MariaDB tuning (optional, non-official)
+   - User: `dolibarr````dockerfile
 
-Adjust `db` command flags in compose for larger datasets, e.g.:
-```yaml
-db:
-  image: mariadb:10.11
-  command: >
-    --character-set-server=utf8mb4
-    --collation-server=utf8mb4_unicode_ci
-    --innodb_buffer_pool_size=512M
+   - Password: `dolibarrpass`RUN docker-php-ext-install -j$(nproc) \
+
+    pdo_mysql \      # Database connectivity
+
+3. **Path Configuration:**    mysqli \         # MySQL improved extension
+
+   - Document root: `/var/www/html`    calendar \       # Calendar functions
+
+   - Data directory: `/var/www/html/documents`    imap \          # Email functionality
+
+   - Configuration path: `/var/www/html/conf`    zip \           # Archive handling
+
+    gd \            # Image processing
+
+4. **URL Settings:**    intl \          # Internationalization
+
+   - Main URL: `http://localhost:8080`    mbstring \      # Multibyte string handling
+
+   - Force HTTPS: Disabled (for Codespace compatibility)    xml \           # XML processing
+
+    soap \          # SOAP web services
+
+### Configuration Template    bcmath \        # Arbitrary precision mathematics
+
+    pcntl           # Process control
+
+```php```
+
+<?php
+
+// Smart Auto-Configuration for Dolibarr in Docker/Codespace**To add more extensions:**
+
+// This file automatically detects environment and configures accordingly```dockerfile
+
+# Add to the docker-php-ext-install command
+
+// Auto-detect if we're running in DockerRUN docker-php-ext-install -j$(nproc) \
+
+$is_docker = file_exists('/.dockerenv') ||     existing_extensions \
+
+             (getenv('HOSTNAME') && preg_match('/^[a-f0-9]{12}$/', getenv('HOSTNAME'))) ||    ldap \          # LDAP authentication
+
+             (getenv('DOCKER_CONTAINER') === 'true');    exif \          # Image metadata
+
+    gettext         # Translation support
+
+// Auto-detect if we're in a Codespace```
+
+$is_codespace = (getenv('CODESPACE_NAME') !== false) || 
+
+                (getenv('GITHUB_CODESPACE_TOKEN') !== false);### Database Configuration (MariaDB)
+
+
+
+// Database Configuration (Docker service names)#### Performance Tuning
+
+$dolibarr_main_db_host = $is_docker ? 'db' : 'localhost';Edit docker-compose.yml:
+
+$dolibarr_main_db_port = '3306';```yaml
+
+$dolibarr_main_db_name = 'dolibarr';db:
+
+$dolibarr_main_db_user = 'dolibarr';  image: mariadb:10.11
+
+$dolibarr_main_db_pass = 'dolibarrpass';  command: >
+
+$dolibarr_main_db_type = 'mysqli';    --character-set-server=utf8mb4
+
+$dolibarr_main_db_character_set = 'utf8mb4';    --collation-server=utf8mb4_unicode_ci
+
+$dolibarr_main_db_collation = 'utf8mb4_unicode_ci';    --innodb_buffer_pool_size=512M
+
     --innodb_log_file_size=256M
-    --max_connections=200
-```
-Validate settings according to your instance size and memory.
 
-## 7) Production notes
+// Auto-configure paths based on environment    --max_connections=200
 
-- Remove DB port publishing (3306) and keep DB on a private network.
-- Add healthchecks with the provided override file:
-  - `docker compose -f docker-compose.yml -f docker-compose.healthchecks.yml up -d`
-- Secrets: inject via environment/secret management; avoid committing sensitive values.
-- Logging/observability: enable access/error logs and log rotation.
+if ($is_docker) {    --query_cache_size=64M
 
-## 8) Rebuild/apply changes
+    $dolibarr_main_document_root = '/var/www/html';    --query_cache_type=1
 
-Typical workflow:
-```bash
-cd docker-deploy
-# Update Dockerfile/nginx/compose as needed
-docker compose build --pull app
-docker compose up -d
-# Verify
-docker compose ps
-docker compose logs -f app
-```
+    $dolibarr_main_url_root = 'http://localhost:8080';```
 
----
+    $dolibarr_main_document_root_alt = '/var/www/html/documents';
 
-This guide is kept short and aligned with the live files. For broader security and deployment guidance, see `SECURITY_HARDENING.md` and `project/DEPLOYMENT.md`. Non-official sections above are labeled accordingly.
+} else {#### Security Hardening
 
-## 9) Database charset and collation (recommended)
+    // Fallback for non-Docker environments```yaml
 
-Dolibarr works best with full Unicode. Use utf8mb4 with utf8mb4_unicode_ci for both the server and the Dolibarr database.
+    $dolibarr_main_document_root = dirname(__FILE__);db:
 
-Check current server defaults and database:
-```bash
-docker compose exec db mysql -e "SHOW VARIABLES LIKE 'character_set_server'; SHOW VARIABLES LIKE 'collation_server';"
-docker compose exec db mysql -e "SELECT DEFAULT_CHARACTER_SET_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME='dolibarr';"
-```
+    $dolibarr_main_url_root = 'http://localhost';  environment:
 
-Create or convert the database to utf8mb4 (destructive if you drop/recreate):
-```bash
-docker compose exec db sh -lc "mysql -u root -prootpassword -e \"
-  DROP DATABASE IF EXISTS dolibarr;
-  CREATE DATABASE dolibarr CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;\""
+    $dolibarr_main_document_root_alt = $dolibarr_main_document_root . '/documents';    MYSQL_ROOT_PASSWORD: your_secure_root_password
+
+}    MYSQL_DATABASE: dolibarr
+
+    MYSQL_USER: dolibarr
+
+// Security and Performance Settings    MYSQL_PASSWORD: your_secure_dolibarr_password
+
+$dolibarr_main_prod = '1';  // Production mode    # Remove root access from outside
+
+$dolibarr_main_force_https = '0';  // Disabled for Codespace    MYSQL_ROOT_HOST: localhost
+
+$dolibarr_main_authentication = 'dolibarr';```
+
+$dolibarr_session_class = 'php';
+
+$dolibarr_main_upload_maxfilesize = '20971520';  // 20MB### Web Server Configuration (Nginx)
+
 ```
 
-Align Dolibarr application config (first install via wizard will set this automatically):
-```php
-// htdocs/conf/conf.php
-$dolibarr_main_db_character_set='utf8mb4';
-$dolibarr_main_db_collation='utf8mb4_unicode_ci';
-```
+#### Current nginx.conf
 
-## 10) Re-run the installer (clean reset)
+## Docker Compose Configuration```nginx
 
-If you want to run the first-install wizard again:
-```bash
-# Restore the BLANK snapshot to reset DB + documents
-printf 'y\n' | /workspaces/dolibarr/docker-deploy/restore_dolibarr.sh \
-  /workspaces/dolibarr/docker-deploy/backups/dolibarr_backup_20251031_120719_BLANK
+server {
 
-# Remove conf.php so Dolibarr exposes /install/
-rm -f /workspaces/dolibarr/htdocs/conf/conf.php
+### docker-compose.yml Structure    listen 80;
 
-# Ensure no install.lock remains
-docker compose exec app sh -lc 'rm -f /var/www/html/documents/install.lock || true'
+    server_name localhost;
 
-# Open the installer
-"$BROWSER" http://localhost:8080/install/
-```
+```yaml    root /var/www/html;
 
-Security note: After installation completes, keep `install.lock` in the documents directory and ensure `htdocs/conf/conf.php` is read-only (440).
+version: '3.8'    index index.php index.html;
+
+
+
+services:    # Security headers
+
+  # Nginx Web Server (Port 8080)    add_header X-Frame-Options "SAMEORIGIN" always;
+
+  web:    add_header X-XSS-Protection "1; mode=block" always;
+
+    image: nginx:1.26.2-alpine    add_header X-Content-Type-Options "nosniff" always;
+
+    ports:
+
+      - "8080:80"    # Main application
+
+    volumes:    location / {
+
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro        try_files $uri $uri/ /index.php?$query_string;
+
+      - dolibarr_documents:/var/www/html/documents    }
+
+    depends_on:
+
+      - app    # PHP processing
+
+    location ~ \.php$ {
+
+  # PHP-FPM Application Server          fastcgi_pass app:9000;
+
+  app:        fastcgi_index index.php;
+
+    build: .        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+
+    volumes:        include fastcgi_params;
+
+      # Dolibarr Docker – Configuration Guide
+
+      Detailed configuration information for the Dolibarr Docker setup: containers, PHP/NGINX tuning, database, security, and performance.
+
+      ## How configuration flows
+
+      conf.php.example → auto-detection at runtime → conf.php (active)
+
+      - Template lives at: `/workspaces/dolibarr/htdocs/conf/conf.php.example`
+      - After installation, the active config is generated at: `/workspaces/dolibarr/htdocs/conf/conf.php`
+      - Auto-detection chooses sane defaults for Docker/Codespaces; manual edits are rarely needed.
+
+      ## Docker Compose configuration
+
+      Key services and mounts (from `docker-deploy/docker-compose.yml`):
+
+      ```yaml
+      services:
+        web:
+          image: nginx:stable-alpine
+          ports: ["8080:80"]
+          volumes:
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf
+            - ../htdocs:/var/www/html
+            - dolibarr_documents:/var/www/html/documents
+          depends_on: [app]
+
+        app:
+          build:
+            context: .
+            dockerfile: Dockerfile
+          environment:
+            PHP_INI_DIR: /usr/local/etc/php
+          volumes:
+            - ../htdocs:/var/www/html
+            - dolibarr_documents:/var/www/html/documents
+          depends_on: [db]
+
+        db:
+          image: mariadb:10.11
+          command: ["--character-set-server=utf8mb4","--collation-server=utf8mb4_unicode_ci"]
+          environment:
+            MYSQL_ROOT_PASSWORD: rootpassword
+            MYSQL_DATABASE: dolibarr
+            MYSQL_USER: dolibarr
+            MYSQL_PASSWORD: dolibarrpass
+          volumes:
+            - mariadb_data:/var/lib/mysql
+          ports: ["3306:3306"]
+
+      volumes:
+        mariadb_data:
+        dolibarr_documents:
+      ```
+
+      Notes
+      - Web is exposed on host port 8080; DB is exposed on 3306 (handy for external tools; consider removing in production).
+      - Code is mounted from `../htdocs`; documents have a named volume shared by web/app.
+      - Service order: web → app → db.
+
+      ## PHP configuration (App container)
+
+      Base image and extensions are defined in `docker-deploy/Dockerfile` (PHP 8.2 FPM, Debian Bookworm). Installed extensions include: pdo_mysql, mysqli, calendar, imap, zip, gd, intl, mbstring, xml, soap, bcmath, pcntl, imagick.
+
+      Production-leaning defaults (already applied in Dockerfile):
+
+      ```dockerfile
+      RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
+          && sed -i 's/memory_limit = 128M/memory_limit = 256M/' "$PHP_INI_DIR/php.ini" \
+          && sed -i 's/max_execution_time = 30/max_execution_time = 300/' "$PHP_INI_DIR/php.ini" \
+          && sed -i 's/;date.timezone =/date.timezone = UTC/' "$PHP_INI_DIR/php.ini"
+      ```
+
+      Customize
+      - Edit `docker-deploy/Dockerfile` (e.g., memory_limit, upload/post sizes, OPcache) and rebuild:
+
+      ```bash
+      docker compose build --no-cache app
+      docker compose up -d
+      ```
+
+      Optional: Enable OPcache (for production):
+
+      ```dockerfile
+      RUN docker-php-ext-install opcache \
+       && echo "opcache.enable=1" >> "$PHP_INI_DIR/php.ini" \
+       && echo "opcache.memory_consumption=128" >> "$PHP_INI_DIR/php.ini" \
+       && echo "opcache.max_accelerated_files=4000" >> "$PHP_INI_DIR/php.ini"
+      ```
+
+      ## Nginx configuration (Web)
+
+      Defined in `docker-deploy/nginx.conf`:
+
+      ```nginx
+      server {
+          listen 80;
+          server_name localhost;
+          root /var/www/html;
+          index index.php;
+
+          location / { try_files $uri $uri/ /index.php?$args; }
+
+          location ~ [^/]\.php(/|$) {
+              fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+              fastcgi_pass app:9000;
+              fastcgi_index index.php;
+              include fastcgi_params;
+              fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+              fastcgi_param PATH_INFO $fastcgi_path_info;
+          }
+
+          # Block access to sensitive files/dirs
+          location ~ /\.ht { deny all; }
+          location ~ ^/conf(/|$) { deny all; }
+      }
+      ```
+
+      Tips
+      - Increase upload size by adding `client_max_body_size 50M;` inside `server {}` if needed.
+      - For HTTPS in production, terminate TLS upstream or provide an SSL server block.
+
+      ## Database configuration (MariaDB)
+
+      Environment (from compose):
+
+      ```yaml
+      environment:
+        MYSQL_ROOT_PASSWORD: rootpassword
+        MYSQL_DATABASE: dolibarr
+        MYSQL_USER: dolibarr
+        MYSQL_PASSWORD: dolibarrpass
+      ```
+
+      Charset/collation are set to utf8mb4/unicode_ci via the container command. For production, consider not publishing `3306` to the host and placing DB on an internal-only network.
+
+      ## Dolibarr application configuration
+
+      - Template: `/workspaces/dolibarr/htdocs/conf/conf.php.example`
+      - Active (after installer runs): `/workspaces/dolibarr/htdocs/conf/conf.php`
+
+      Key runtime values selected automatically for Docker/Codespaces:
+      - DB host `db`, port `3306`, name `dolibarr`, user `dolibarr`, pass `dolibarrpass`
+      - URL root `http://localhost:8080`
+      - Document root `/var/www/html`, documents `/var/www/html/documents`
+      - Production mode on by default; HTTPS forced off in Codespaces
+
+      ## Ports and volumes
+
+      - Web: host 8080 → container 80
+      - DB: host 3306 → container 3306 (optional in production)
+      - Volumes: `mariadb_data` (DB persistence), `dolibarr_documents` (shared docs)
+
+      ## Security hardening
+
+      - Least exposure: avoid publishing DB port in prod; use a private Docker network.
+      - File permissions: keep `htdocs/conf/conf.php` read-only post-install; ensure `htdocs/documents/` is writable by the app only.
+      - Reverse-proxy headers: add security headers (X-Frame-Options, X-Content-Type-Options, etc.) in Nginx if required by policy.
+      - Secrets: prefer environment injection via CI or Docker secrets (optional).
+
       ## Optional health checks (compose override)
 
       Health checks are optional and not required for local use, but you can enable them via a small compose override without touching your base file.

@@ -57,40 +57,24 @@ if ! docker compose ps | grep -q "Up"; then
 fi
 
 # Create backup
-BACKUPS_DIR="/workspaces/dolibarr/docker-deploy/backups"
-mkdir -p "$BACKUPS_DIR"
-
-# Ensure one BLANK backup exists (create if missing)
-BLANK_COUNT=$(ls -d ${BACKUPS_DIR}/dolibarr_backup_*_BLANK 2>/dev/null | wc -l | tr -d ' ' || echo 0)
-if [ "$BLANK_COUNT" -eq 0 ]; then
-    warn "No BLANK backup found. Creating an initial BLANK backup before exit..."
-    if ./mark_blank_backup.sh; then
-        log "✅ BLANK backup created"
-    else
-        warn "⚠️ Failed to create BLANK backup. Proceeding without it."
-    fi
+log "📦 Creating daily backup..."
+if ./backup_dolibarr.sh; then
+    log "✅ Backup completed successfully"
 else
-    # If multiple BLANK backups exist, keep the oldest and remove extras
-    if [ "$BLANK_COUNT" -gt 1 ]; then
-        info "📦 Multiple BLANK backups detected ($BLANK_COUNT). Keeping the oldest, removing extras."
-        mapfile -t BLANKS < <(ls -dt ${BACKUPS_DIR}/dolibarr_backup_*_BLANK 2>/dev/null || true)
-        for (( i=1; i<${#BLANKS[@]}; i++ )); do
-            rm -rf "${BLANKS[$i]}" || true
-        done
-    fi
+    error "❌ Backup failed - check manually before exiting!"
 fi
 
-# Create a working backup (non-blank)
-log "📦 Creating daily working backup..."
-if ./backup_dolibarr.sh; then
-    log "✅ Working backup completed successfully"
+# Assemble compliance/OSS backup (coos_backup) – non-blocking
+log "📚 Assembling compliance backup (coos_backup)..."
+if /usr/bin/env bash -c '/workspaces/dolibarr/scripts/project/backup_coos.sh'; then
+    log "✅ coos_backup assembled."
 else
-    error "❌ Working backup failed - check manually before exiting!"
+    warn "⚠️ coos_backup assembly failed (non-blocking). Check scripts/project/backup_coos.sh."
 fi
 
 # Show backup info
-LATEST_BACKUP=$(ls -t "$BACKUPS_DIR" | head -1)
-BACKUP_SIZE=$(du -sh "$BACKUPS_DIR"/"$LATEST_BACKUP" | cut -f1)
+LATEST_BACKUP=$(ls -t /workspaces/dolibarr/docker-deploy/backups/ | head -1)
+BACKUP_SIZE=$(du -sh /workspaces/dolibarr/docker-deploy/backups/"$LATEST_BACKUP" | cut -f1)
 info "📦 Latest backup: $LATEST_BACKUP ($BACKUP_SIZE)"
 
 # Stop containers gracefully
@@ -103,14 +87,10 @@ fi
 
 #!/usr/bin/env bash
 # Cleanup old backups: keep newest 3 non-protected; always keep protected and BLANK backups
-log "🧹 Enforcing backup retention: 1 BLANK, 2 working (non-protected), and 1 coos_backup directory..."
+log "🧹 Cleaning up old backups (keep last 3 non-protected; preserve protected and BLANK backups)..."
 
-BACKUP_ROOT="$BACKUPS_DIR"
-# Build list of all backups without using 'mapfile' for broader shell compatibility
-ALL_BACKUPS=()
-while IFS= read -r line; do
-    [ -n "$line" ] && ALL_BACKUPS+=("$line")
-done < <(ls -dt ${BACKUP_ROOT}/dolibarr_backup_* 2>/dev/null || true)
+BACKUP_ROOT="/workspaces/dolibarr/docker-deploy/backups"
+mapfile -t ALL_BACKUPS < <(ls -dt ${BACKUP_ROOT}/dolibarr_backup_* 2>/dev/null || true)
 
 # Classify backups
 PROTECTED=()
@@ -130,11 +110,11 @@ for b in "${ALL_BACKUPS[@]}"; do
     REGULAR+=("$b")
 done
 
+# Remove older REGULAR beyond 3
 REMOVED_COUNT=0
-# Keep only the newest 2 REGULAR backups
-if [ ${#REGULAR[@]} -gt 2 ]; then
-    for (( i=2; i<${#REGULAR[@]}; i++ )); do
-        rm -rf "${REGULAR[$i]}" || true
+if [ ${#REGULAR[@]} -gt 3 ]; then
+    for (( i=3; i<${#REGULAR[@]}; i++ )); do
+        rm -rf "${REGULAR[$i]}"
         ((REMOVED_COUNT++))
     done
 fi
@@ -142,15 +122,15 @@ fi
 if [ "$REMOVED_COUNT" -gt 0 ]; then
     info "🗑️ Removed $REMOVED_COUNT old backups. Preserved: ${#PROTECTED[@]} protected, ${#BLANK[@]} BLANK."
 else
-    info "🗑️ No cleanup needed. Non-protected backups: ${#REGULAR[@]} (limit 2)."
+    info "🗑️ No cleanup needed. Non-protected backups: ${#REGULAR[@]} (limit 3)."
 fi
 
 # Show final status
 echo ""
 echo -e "${BLUE}📊 Exit Summary:${NC}"
 echo "- Latest backup: $LATEST_BACKUP"
-echo "- Backup count: $(find "$BACKUPS_DIR" -maxdepth 1 -type d -name 'dolibarr_backup_*' 2>/dev/null | wc -l)"
-echo "- Total backup size: $(du -sh "$BACKUPS_DIR" 2>/dev/null | cut -f1)"
+echo "- Backup count: $(find /workspaces/dolibarr/docker-deploy/backups -maxdepth 1 -type d -name 'dolibarr_backup_*' 2>/dev/null | wc -l)"
+echo "- Total backup size: $(du -sh /workspaces/dolibarr/docker-deploy/backups/ 2>/dev/null | cut -f1)"
 echo "- Containers stopped: ✅"
 echo ""
 echo -e "${GREEN}✅ Safe to close Codespace!${NC}"
@@ -162,58 +142,3 @@ echo -e "${YELLOW}💡 Optional Verification:${NC}"
 echo "- Check backup exists: ls -la backups/"
 echo "- Verify containers stopped: docker compose ps"
 echo "- Manual backup if needed: ./backup_dolibarr.sh"
-
-# Generate/refresh compliance-oriented coos_backup
-COOS_SCRIPT="/workspaces/dolibarr/scripts/project/backup_coos.sh"
-if [ -x "$COOS_SCRIPT" ]; then
-    log "🗂️ Generating coos_backup (compliance trace)..."
-    if bash "$COOS_SCRIPT"; then
-        log "✅ coos_backup generated/updated"
-    else
-        warn "⚠️ coos_backup generation failed"
-    fi
-else
-    warn "⚠️ coos_backup script not found or not executable: $COOS_SCRIPT"
-fi
-
-# --- Quick Session Audit & Assistant Reminder ---
-# Compute previous backup timestamp and summarize changes since then
-echo ""
-echo -e "${BLUE}🧭 Quick Session Audit${NC}"
-
-PREV_BACKUP_DIR=$(ls -dt "$BACKUPS_DIR"/dolibarr_backup_* 2>/dev/null | sed -n '2p' || true)
-if [ -n "${PREV_BACKUP_DIR:-}" ]; then
-    PREV_BACKUP_NAME=$(basename "$PREV_BACKUP_DIR")
-    # Extract YYYYMMDD_HHMMSS
-    TS_PART=$(echo "$PREV_BACKUP_NAME" | sed -E 's/^.*_([0-9]{8})_([0-9]{6}).*$/\1 \2/')
-    PREV_YMD=$(echo "$TS_PART" | awk '{print $1}')
-    PREV_HMS=$(echo "$TS_PART" | awk '{print $2}')
-    PREV_ISO="${PREV_YMD:0:4}-${PREV_YMD:4:2}-${PREV_YMD:6:2} ${PREV_HMS:0:2}:${PREV_HMS:2:2}:${PREV_HMS:4:2}"
-else
-    PREV_ISO="24 hours ago"
-    PREV_BACKUP_NAME="(none; using last 24h)"
-fi
-
-DOCS_DIR="/workspaces/dolibarr/htdocs/documents"
-DOCS_CHANGED=$(find "$DOCS_DIR" -type f -newermt "$PREV_ISO" 2>/dev/null | wc -l | tr -d ' ')
-
-# Git-based source changes (workspace repo)
-REPO_ROOT="/workspaces/dolibarr"
-if command -v git >/dev/null 2>&1 && git -C "$REPO_ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    REPO_CHANGED=$(git -C "$REPO_ROOT" status --porcelain 2>/dev/null | wc -l | tr -d ' ')
-    RECENT_COMMITS=$(git -C "$REPO_ROOT" log --since="$PREV_ISO" --oneline 2>/dev/null | wc -l | tr -d ' ')
-else
-    REPO_CHANGED=0
-    RECENT_COMMITS=0
-fi
-
-echo "- Previous backup reference: $PREV_BACKUP_NAME"
-echo "- Files changed in documents/ since then: $DOCS_CHANGED"
-echo "- Working tree changes (uncommitted): $REPO_CHANGED"
-echo "- Recent commits since reference: $RECENT_COMMITS"
-
-echo ""
-echo -e "${YELLOW}🤖 Assistant sync reminder:${NC}"
-echo "- Ask in chat: 'Sync my last session and audit changes'"
-echo "- I will summarize: backup, documents delta, git changes, and coos trace updates."
-echo ""

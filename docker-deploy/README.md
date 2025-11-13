@@ -4,11 +4,12 @@
 Complete Docker setup for Dolibarr ERP/CRM with PHP 8.2, MariaDB 10.11, and Nginx. This configuration has been tested and verified to work correctly.
 
 ## Software Versions (Tested Configuration)
-- **Docker**: 27.3.1+
-- **Docker Compose**: 2.29.7+
-- **PHP**: 8.2.24 (FPM)
-- **MariaDB**: 10.11.8
-- **Nginx**: 1.26.2 (Alpine)
+- **Docker**: 28.3.1+
+- **Docker Compose**: 2.38.2+
+- **PHP**: 8.2.29 (FPM)
+- **MariaDB**: 10.11.14
+- **Nginx**: 1.28.0 (Alpine)
+- **Redis**: 7.x (Alpine) [optional]
 - **Dolibarr**: Latest (from source)
 
 ## Quick Start
@@ -27,6 +28,8 @@ docker compose up -d
 ### 2. Access Application
 - **Web Interface**: http://localhost:8080
 - **Database**: localhost:3306 (user: dolibarr, password: dolibarrpass)
+ 
+Tip (Codespaces): open the forwarded port 8080 from the Ports panel (https://<codespace>-8080.app.github.dev) to avoid URL-root mismatches.
 
 ### 3. Complete Installation
 
@@ -58,17 +61,17 @@ If you need to recreate this setup on a new system:
 ## Architecture
 
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Nginx Web    │    │   PHP-FPM App   │    │  MariaDB DB     │
-│   Port: 8080    │───▶│   PHP 8.2       │───▶│   Port: 3306    │
-│                 │    │   Dolibarr      │    │                 │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                       │                       │
-         ▼                       ▼                       ▼
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│  nginx.conf     │    │  htdocs/        │    │  mariadb_data   │
-│  (config)       │    │  (source code)  │    │  (persistent)   │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Nginx Web     │    │   PHP-FPM App   │    │   MariaDB DB    │    │     Redis       │
+│   Port: 8080    │───▶│   PHP 8.2       │───▶│   Port: 3306    │◀──▶│   (optional)    │
+│                 │    │   Dolibarr      │    │                 │    │   sessions/cache│
+└─────────────────┘    └─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │                       │
+         ▼                       ▼                       ▼                       ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│  nginx.conf     │    │  htdocs/        │    │  mariadb_data   │    │  (internal only)│
+│  (config)       │    │  (source code)  │    │  (persistent)   │    │                  │
+└─────────────────┘    └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
 ## Services
@@ -87,6 +90,11 @@ If you need to recreate this setup on a new system:
 - **Image**: mariadb:10.11
 - **Port**: 3306
 - **Purpose**: MySQL-compatible database for Dolibarr
+
+### Cache/Session (redis) — optional
+- **Image**: redis:7-alpine
+- **Port**: internal only (no published host port)
+- **Purpose**: Optional sessions/cache/rate-limits. PHP Redis extension is preinstalled in the app image. Enable sessions via the script below.
 
 ## Volumes
 - `mariadb_data`: Persistent database storage
@@ -131,6 +139,15 @@ docker compose logs -f
 docker compose restart app
 ```
 
+### Enable/Disable Redis-backed PHP sessions (optional)
+```bash
+# Enable Redis sessions (writes htdocs/.user.ini)
+scripts/project/redis_toggle.sh enable
+
+# Disable (revert to file-based sessions)
+scripts/project/redis_toggle.sh disable
+```
+
 ## Quick diagnostics
 
 Use these checks when something feels off:
@@ -150,6 +167,23 @@ docker compose exec app php -m | grep -E '^(mysqli|gd|intl)$'
 
 # 5) Database reachable?
 docker compose exec -T db mysqladmin ping -h localhost --silent
+```
+
+#### 500 on /admin/company.php or when saving settings
+- Ensure DB host inside Docker is `db` (not `localhost`). The provided smart `conf.php.example` auto-detects Docker and sets DB to `db`.
+- In Codespaces, use the forwarded URL from the Ports panel (…-8080.app.github.dev) to avoid URL-root mismatches.
+- Check logs for details:
+```bash
+docker compose logs --tail=200 app
+docker compose logs --tail=200 web
+```
+
+#### URL Root (Codespaces quick fix)
+If you see redirects or URL mismatches after install, set Dolibarr's URL root to the forwarded HTTPS URL:
+```bash
+# Replace with your actual forwarded 8080 URL
+FORWARDED="https://<your-codespace>-8080.app.github.dev"
+sed -i "s#^\\$dolibarr_main_url_root=.*#\\$dolibarr_main_url_root='${FORWARDED}';#" ../htdocs/conf/conf.php
 ```
 
 ### Database Access
@@ -196,6 +230,10 @@ Detailed documentation is available in the `setup/` directory:
 - `recreate_dolibarr.sh` - Recreate entire setup from scratch
 - `daily_start.sh` - Daily startup routine with health checks
 - `daily_exit.sh` - Safe daily exit with automatic backup
+- `uninstall_app.sh` - Reset app to uninstalled state (removes DB/docs volumes)
+- `mark_blank_backup.sh` - Mark current state as your preserved blank backup
+- `make_blank_backup.sh` - Create and label a blank backup (e.g., `BLANK02`)
+- `first_install.sh` - Bring stack up and check conf.php, documents dir, install.lock
 
 ### Usage Examples
 ```bash
@@ -214,6 +252,15 @@ Detailed documentation is available in the `setup/` directory:
 
 # Mark your blank backup (after installation, before real data)
 ./mark_blank_backup.sh
+
+# Create a labeled blank backup (e.g., BLANK02)
+./make_blank_backup.sh BLANK02
+
+# Uninstall/reset to a clean state (destroys DB + documents)
+./uninstall_app.sh -y
+
+# First-install helper (checks + guidance)
+./first_install.sh --auto-conf --unlock --open
 ```
 
 ## Backup Management
@@ -240,10 +287,41 @@ This creates a special "blank" backup that will be permanently preserved.
 
 1. **Blank Backup**: Clean installation state (marked with `_BLANK` suffix)
    - Created after installation, before business data
-   - Permanently preserved by retention system
+   - Permanently preserved by retention system (canonical `_BLANK`)
    - Use for system reset to clean state
 
 2. **Daily Backups**: Regular operational backups
+   ### Replace Blank With Current State
+
+   To make the current latest backup the only preserved blank baseline and remove all others:
+
+   ```bash
+   cd /workspaces/dolibarr/docker-deploy/backups
+
+   # Find latest backup and rename to canonical _BLANK
+   latest="$(ls -1dt dolibarr_backup_* | head -1)" && \
+   base="$(echo "$latest" | sed -E 's/_BLANK([0-9]+)?$//')" && \
+   keep="${base}_BLANK" && \
+   [ "$latest" != "$keep" ] && mv "$latest" "$keep" || true
+
+   # Protect and document
+   : > "$keep/.protected"
+   cat > "$keep/BLANK_BACKUP_INFO.txt" <<EOF
+   DOLIBARR BLANK BACKUP (canonical)
+   =================================
+   Created: $(date)
+   Directory: $keep
+
+   Purpose: Clean working baseline to restore to a known-good state.
+   EOF
+
+   # Remove all other backups (dangerous):
+   for d in dolibarr_backup_*; do [ "$d" = "$keep" ] || rm -rf -- "$d"; done
+
+   ls -ld "$keep"
+   ```
+
+   Note: This enforces a single canonical `_BLANK` backup policy.
    - Created automatically by `daily_exit.sh`
    - Contains all your business data
    - Only last 3 are kept (oldest deleted automatically)
@@ -253,6 +331,7 @@ This creates a special "blank" backup that will be permanently preserved.
 - Change database credentials for production
 - Configure SSL/TLS for production use
 - Regularly update container images
+- Optional hardening: see `security/nginx.hardening.conf` (non-official snippet). Include carefully in `nginx.conf` after enabling HTTPS.
 
 ## Support
 - **Dolibarr Documentation**: https://wiki.dolibarr.org/
@@ -264,15 +343,6 @@ This Docker configuration is provided under the same license as Dolibarr (GPL v3
 
 ---
 
-**Last Updated**: October 27, 2025
+**Last Updated**: November 13, 2025
 **Configuration Status**: ✅ Tested and Working
-## Blank Backup Information
-
-**Blank Backup Created:** Fri Oct 31 12:07:22 UTC 2025
-**Backup Name:** dolibarr_backup_20251031_120719_BLANK
-**Purpose:** Clean state backup for system reset
-
-This backup contains your Dolibarr installation immediately after setup,
-before any business data was added. It's automatically preserved by
-the backup retention system.
 

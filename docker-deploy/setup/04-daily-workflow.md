@@ -138,7 +138,6 @@ cd /workspaces/dolibarr/docker-deploy
 **This script will:**
 - 💾 Create complete backup (database + documents + config)
 - 🧹 Manage backup retention (keep 3 recent + 1 blank)
-- 🧾 Update compliance trace (coos_backup/ MANIFEST & TRACE)
 - 📊 Show backup statistics and location
 - 🛑 Stop all containers gracefully
 - ✅ Validate safe shutdown
@@ -159,7 +158,6 @@ You can now safely stop your GitHub Codespace. Your data is:
 - ✅ **Backed up** in the `/workspaces/dolibarr/docker-deploy/backups/` directory
 - ✅ **Persistent** in Docker volumes (survives Codespace restart)
 - ✅ **Protected** by retention policy (3 recent + 1 blank backup)
-- ✅ **Audited** via compliance trace in `/workspaces/dolibarr/coos_backup/`
 
 ## Backup Management Strategy
 
@@ -241,10 +239,10 @@ ls -la backups/
 
 ```bash
 # Check container status
-docker-compose ps
+docker compose ps
 
 # View error logs
-docker-compose logs
+docker compose logs
 
 # Try recreation if corrupted
 ./recreate_dolibarr.sh

@@ -7,9 +7,10 @@ Complete documentation for all operational scripts in the Dolibarr Docker setup.
 The setup includes several automated scripts for common operations:
 
 - **Daily Workflow:** `daily_start.sh`, `daily_exit.sh`
-- **Backup System:** `backup_dolibarr.sh`, `restore_dolibarr.sh`, `mark_blank_backup.sh`
-- **System Management:** `recreate_dolibarr.sh`
-- **Reporting:** `scripts/reporting/products_categories_map.sh`
+- **Backup System:** `backup_dolibarr.sh`, `restore_dolibarr.sh`, `mark_blank_backup.sh`, `make_blank_backup.sh`
+- **First Install:** `first_install.sh`
+- **System Management:** `recreate_dolibarr.sh`, `uninstall_app.sh`
+ - **Debug/Support:** `tools/capture_debug_info.sh`
 
 ## Daily Workflow Scripts
 
@@ -68,6 +69,47 @@ cd /workspaces/dolibarr/docker-deploy
 - `1` - Container startup failed
 - `2` - Health check failed
 - `3` - Service timeout
+
+---
+
+### tools/capture_debug_info.sh
+
+**Purpose:** Capture a quick diagnostic bundle (compose status, logs, DB constants) for support.
+
+**Location:** `/workspaces/dolibarr/docker-deploy/tools/capture_debug_info.sh`
+
+**Usage:**
+```bash
+cd /workspaces/dolibarr/docker-deploy
+./tools/capture_debug_info.sh
+```
+
+**Outputs:**
+- `debug_info/compose_ps.txt`, `compose_config.yml`
+- Recent logs for `web`, `app`, `db`
+- Selected Dolibarr constants and sample category listing
+- Blank backup listing if present
+
+---
+
+### first_install.sh
+
+**Purpose:** Guided first install with environment checks and quick fixes.
+
+**Location:** `/workspaces/dolibarr/docker-deploy/first_install.sh`
+
+**Usage:**
+```bash
+cd /workspaces/dolibarr/docker-deploy
+./first_install.sh --auto-conf --unlock --open
+```
+
+**What it does:**
+1. 🚀 Starts Docker stack (`docker compose up -d`)
+2. 📁 Ensures `/var/www/html/documents` exists and is writable (symlink `/var/www/documents`)
+3. ⚙️ Copies `conf.php.example` to `conf.php` if missing (`--auto-conf`)
+4. 🔓 Removes installer lock if present (`--unlock`)
+5. 🌐 Optionally opens installer URL (`--open`)
 
 ---
 
@@ -305,6 +347,24 @@ cd /workspaces/dolibarr/docker-deploy
 
 ---
 
+### make_blank_backup.sh
+
+**Purpose:** Create and label a blank backup (e.g., `BLANK02`).
+
+**Location:** `/workspaces/dolibarr/docker-deploy/make_blank_backup.sh`
+
+**Usage:**
+```bash
+cd /workspaces/dolibarr/docker-deploy
+./make_blank_backup.sh BLANK02
+```
+
+**Notes:**
+- Tags the latest backup dir with the provided label
+- Writes `BLANK_BACKUP_INFO.txt` and adds `.protected`
+
+---
+
 ## System Management Scripts
 
 ### recreate_dolibarr.sh
@@ -361,28 +421,26 @@ cd /workspaces/dolibarr/docker-deploy
 
 ---
 
-## Reporting Scripts
+### uninstall_app.sh
 
-### products_categories_map.sh
+**Purpose:** Reset to an uninstalled application state (keeps repository files).
 
-**Purpose:** Export a map of products (ref, label) with their assigned Categories/Tags, including full category hierarchy paths (Parent > Child > …).
-
-**Location:** `/workspaces/dolibarr/scripts/reporting/products_categories_map.sh`
+**Location:** `/workspaces/dolibarr/docker-deploy/uninstall_app.sh`
 
 **Usage:**
 ```bash
-bash /workspaces/dolibarr/scripts/reporting/products_categories_map.sh
+cd /workspaces/dolibarr/docker-deploy
+./uninstall_app.sh -y
 ```
 
-**Output:**
-- Human-readable table: `docker-deploy/reports/products_categories_map.txt`
-- CSV file: `docker-deploy/reports/products_categories_map.csv`
-   - Columns: ref, label, categories (flat labels), category_paths (hierarchical paths)
+**What it does:**
+1. 🛑 Stops the compose stack
+2. 🗑️ Removes `htdocs/conf/conf.php` and `htdocs/install/install.lock`
+3. 🧹 Removes project volumes (database + documents)
+4. 🚀 Starts services fresh
+5. 📣 Prints installer URL and next steps
 
-Notes:
-- Dolibarr uses the Categories module as “Categories/Tags”; this report lists those tags per product.
-- Hierarchies are computed via recursive CTE over `llx_categorie.fk_parent`.
-- Query reads from `llx_product`, `llx_categorie_product`, `llx_categorie`.
+---
 
 ## Script Management
 

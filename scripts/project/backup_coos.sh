@@ -21,7 +21,6 @@ cat > "$OUT_DIR/MANIFEST.md" <<EOF
 Included references (not copies unless noted):
 - COPYING (GNU GPL), COPYRIGHT, ChangeLog
 - SECURITY_HARDENING.md (non-official sections labeled)
-- project/PROJECT_SPEC.md, project/DEPLOYMENT.md
 
 To refresh this backup, re-run scripts/project/backup_coos.sh.
 EOF

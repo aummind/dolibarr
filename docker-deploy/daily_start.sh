@@ -54,15 +54,8 @@ wait_for_web() {
     local tries=${2:-30}
     local sleep_s=${3:-2}
     for ((i=1;i<=tries;i++)); do
-        if command -v curl >/dev/null 2>&1; then
-            if curl -s -o /dev/null -I -w "%{http_code}" "$url" | grep -qE '^(200|302)$'; then
-                return 0
-            fi
-        else
-            # Fallback: probe from inside web container
-            if docker compose exec -T web wget -q --spider http://localhost/ >/dev/null 2>&1; then
-                return 0
-            fi
+        if curl -s -o /dev/null -I -w "%{http_code}" "$url" | grep -qE '^(200|302)$'; then
+            return 0
         fi
         sleep "$sleep_s"
     done
@@ -80,9 +73,8 @@ log "🚀 Starting daily Dolibarr session..."
 
 require_compose
 
-# Navigate to script directory (portable)
-SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
-cd "$SCRIPT_DIR"
+# Navigate to correct directory
+cd /workspaces/dolibarr/docker-deploy
 
 # Start or ensure all containers are up
 log "▶️ Ensuring Docker containers are up..."
@@ -135,21 +127,6 @@ else
     warn "⚠️ Dolibarr web interface may not be ready yet"
 fi
 
-# Backup presence/retention check
-BACKUPS_DIR="/workspaces/dolibarr/docker-deploy/backups"
-BLANK_COUNT=$(ls -d ${BACKUPS_DIR}/dolibarr_backup_*_BLANK 2>/dev/null | wc -l | tr -d ' ' || echo 0)
-REGULAR_COUNT=$(ls -d ${BACKUPS_DIR}/dolibarr_backup_* 2>/dev/null | grep -vc "_BLANK$" || echo 0)
-COOS_DIR="/workspaces/dolibarr/coos_backup"
-if [ "$BLANK_COUNT" -lt 1 ]; then
-    warn "⚠️ No BLANK backup found. Consider running: docker-deploy/mark_blank_backup.sh"
-fi
-if [ "$REGULAR_COUNT" -lt 2 ]; then
-    warn "⚠️ Fewer than 2 working backups present ($REGULAR_COUNT). A new backup will be created on exit."
-fi
-if [ ! -d "$COOS_DIR" ]; then
-    warn "⚠️ coos_backup directory missing. It will be generated on exit."
-fi
-
 # Check backup status
 BACKUP_COUNT=$(ls /workspaces/dolibarr/docker-deploy/backups/ 2>/dev/null | wc -l)
 if [ "$BACKUP_COUNT" -gt 0 ]; then
@@ -182,10 +159,6 @@ if [ -n "${CODESPACE_NAME:-}" ]; then
     echo "1. Check the 'PORTS' tab in VS Code"
     echo "2. Ensure port 8080 is forwarded and set to 'Public'"
     echo ""
-    # Attempt to open the forwarded URL if a browser helper is available
-    if [ -n "${BROWSER:-}" ] && command -v "$BROWSER" >/dev/null 2>&1; then
-        "$BROWSER" "$CODESPACE_URL" >/dev/null 2>&1 || true
-    fi
 fi
 
 echo -e "${GREEN}✅ Dolibarr ready for daily use!${NC}"
