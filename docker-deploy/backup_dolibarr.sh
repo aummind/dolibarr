@@ -52,12 +52,12 @@ mkdir -p "$BACKUP_DIR"/{database,documents,config}
 # Backup database
 log "Backing up database..."
 docker compose -f "$DOCKER_COMPOSE_FILE" exec -T db mysqldump \
-    -u dolibarr \
-    --password=dolibarrpass \
-    --single-transaction \
-    --routines \
-    --triggers \
-    dolibarr > "$BACKUP_DIR/database/dolibarr_$TIMESTAMP.sql"
+        -u dolibarr \
+        --password=dolibarrpass \
+        --single-transaction \
+        --routines \
+        --triggers \
+        dolibarr > "$BACKUP_DIR/database/dolibarr_$TIMESTAMP.sql"
 
 if [ $? -eq 0 ]; then
     log "Database backup completed: $(du -h "$BACKUP_DIR/database/dolibarr_$TIMESTAMP.sql" | cut -f1)"

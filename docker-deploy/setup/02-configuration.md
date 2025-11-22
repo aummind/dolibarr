@@ -142,7 +142,7 @@ $dolibarr_main_db_name = 'dolibarr';db:
 
 $dolibarr_main_db_user = 'dolibarr';  image: mariadb:10.11
 
-$dolibarr_main_db_pass = 'dolibarrpass';  command: >
+$dolibarr_main_db_pass = 'dolibarrpass';
 
 $dolibarr_main_db_type = 'mysqli';    --character-set-server=utf8mb4
 
@@ -176,7 +176,10 @@ if ($is_docker) {    --query_cache_size=64M
 
     MYSQL_USER: dolibarr
 
-// Security and Performance Settings    MYSQL_PASSWORD: your_secure_dolibarr_password
+// Security and Performance Settings
+// Database password should be stored in .env file
+// Never commit passwords to version control
+    MYSQL_PASSWORD: dolibarrpass
 
 $dolibarr_main_prod = '1';  // Production mode    # Remove root access from outside
 

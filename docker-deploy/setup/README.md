@@ -16,7 +16,6 @@ This setup provides a production-ready Dolibarr installation with:
 
 1. **Start the system:**
    ```bash
-   cd /workspaces/dolibarr/docker-deploy
    ./daily_start.sh
    ```
 

@@ -21,7 +21,6 @@ Complete Docker setup for Dolibarr ERP/CRM with PHP 8.2, MariaDB 10.11, and Ngin
 
 ### 1. Clone and Start
 ```bash
-cd /workspaces/dolibarr/docker-deploy
 docker compose up -d
 ```
 

@@ -94,12 +94,14 @@ Use these **exact** database settings:
 
 | Setting | Value |
 |---------|-------|
+| **Setting** | **Value** |
+|------------|----------|
 | **Database Type** | MySQL/MariaDB |
 | **Database Server** | `db` |
-| **Database Name** | `dolibarr` |
-| **Database User** | `dolibarr` |
-| **Database Password** | `dolibarrpass` |
 | **Database Port** | `3306` |
+| **Database Name** | `dolibarr` |
+| **Database Username** | `dolibarr` |
+| **Database Password** | `dolibarrpass` |
 | **Database Prefix** | `llx_` |
 
 ### 4.3 Administrator Account

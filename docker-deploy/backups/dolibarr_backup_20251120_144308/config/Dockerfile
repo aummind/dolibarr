@@ -51,6 +51,7 @@ RUN groupadd -g 1000 dolibarr \
 
 # Create directory structure
 RUN mkdir -p /var/www/html/documents \
+    && ln -s /var/www/html/documents /var/www/documents \
     && chown -R dolibarr:dolibarr /var/www/html
 
 # Set working directory

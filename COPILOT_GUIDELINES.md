@@ -49,13 +49,18 @@ Add and update as we work together. Use these consistently in responses.
 - Prioritize: Compliance (Indian GST, ISO 14001), safety, batch tracking.
 - When uncertain: Offer safe defaults and ask minimum clarifying questions.
 - Use the docker-deploy scripts for lifecycle (start/exit/backup/restore).
+- **Session start protocol**: Wait for user to run `./daily_start.sh` before referencing web installer or accessing Dolibarr UI.
 - Treat session-context.md as the single source of truth for current phase.
 
 ## Implementation Rules
+- **STRICT: Work through Dolibarr modules and UI first.** All configuration, setup, and customization must be attempted via the Dolibarr interface before considering code changes. Only propose direct coding when:
+  - The feature is confirmed unavailable in Dolibarr's UI/modules
+  - A module limitation is documented and requires extension
+  - Custom integration or API work is explicitly requested
+  - When proposing code, always explain why the UI approach won't work
 - Keep changes minimal and focused; no unrelated refactors.
-- Prefer performing configurations through the Dolibarr UI/modules unless code changes are explicitly required.
 - Prefer root-cause fixes over surface-level patches.
-- Respect existing structure and naming; don’t add licenses/headers.
+- Respect existing structure and naming; don't add licenses/headers.
 - Avoid one-letter variables unless explicitly requested.
 - When adding files, place them where discoverable and documented.
 
@@ -78,4 +83,3 @@ Add and update as we work together. Use these consistently in responses.
 Paste or trigger this at session start:
 
 "Load workspace guidelines from `COPILOT_GUIDELINES.md`. For this session, use `session-context.md`, `/workspaces/dolibarr/README.md`, `chat-templates.md`, and `docker-deploy/setup/*.md` as standing context. Confirm loaded, summarize key constraints (India manufacturing, Karnataka, ISO 14001/14076), and list any missing items for me to fill."
-"Load workspace guidelines from `COPILOT_GUIDELINES.md`. For this session, use `session-context.md`, `/workspaces/dolibarr/README.md`, `chat-templates.md`, and `docker-deploy/setup/*.md` as standing context. Confirm loaded, summarize key constraints (India manufacturing, Karnataka, ISO 14001:2015 and ISO 14067:2018), and list any missing items for me to fill."
