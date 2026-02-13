@@ -3933,7 +3933,7 @@ CREATE TABLE `llx_actioncomm` (
   KEY `idx_actioncomm_ref_ext` (`ref_ext`),
   KEY `idx_actioncomm_percent` (`percent`),
   KEY `idx_actioncomm_ref` (`ref`,`entity`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3942,6 +3942,11 @@ CREATE TABLE `llx_actioncomm` (
 
 LOCK TABLES `llx_actioncomm` WRITE;
 /*!40000 ALTER TABLE `llx_actioncomm` DISABLE KEYS */;
+INSERT INTO `llx_actioncomm` VALUES
+(6,'6',NULL,1,'2025-11-20 16:22:48','2025-11-20 16:22:48',40,'AC_PRODUCT_DELETE','2025-11-20 16:22:48','2025-11-20 16:22:48',1,NULL,NULL,NULL,NULL,NULL,0,1,0,0,'default',0,-1,'',0,'Product 060000001 deleted','Product 060000001 deleted',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,3,'product','172.18.0.1',NULL,NULL,NULL),
+(7,'7',NULL,1,'2026-01-27 07:21:04','2026-01-27 07:21:04',40,'AC_PRODUCT_CREATE','2026-01-27 07:21:04','2026-01-27 07:21:04',1,NULL,NULL,NULL,NULL,NULL,0,1,0,0,'default',0,-1,'',0,'Product 060000001 created','Product 060000001 created',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,4,'product','172.18.0.1',NULL,NULL,NULL),
+(8,'8',NULL,1,'2026-01-27 07:23:33','2026-01-27 07:23:33',40,'AC_PRODUCT_MODIFY','2026-01-27 07:23:33','2026-01-27 07:23:33',1,NULL,NULL,NULL,NULL,NULL,0,1,0,0,'default',0,-1,'',0,'Product 060000001 modified','Product 060000001 modified',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,4,'product','172.18.0.1',NULL,NULL,NULL),
+(9,'9',NULL,1,'2026-01-27 07:46:22','2026-01-27 07:46:22',40,'AC_PRODUCT_CREATE','2026-01-27 07:46:22','2026-01-27 07:46:22',1,NULL,NULL,NULL,NULL,NULL,0,1,0,0,'default',0,-1,'',0,'Product 060000002 created','Product 060000002 created',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,5,'product','172.18.0.1',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `llx_actioncomm` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4026,7 +4031,7 @@ CREATE TABLE `llx_actioncomm_resources` (
   PRIMARY KEY (`rowid`),
   UNIQUE KEY `uk_actioncomm_resources` (`fk_actioncomm`,`element_type`,`fk_element`),
   KEY `idx_actioncomm_resources_fk_element` (`fk_element`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4035,6 +4040,11 @@ CREATE TABLE `llx_actioncomm_resources` (
 
 LOCK TABLES `llx_actioncomm_resources` WRITE;
 /*!40000 ALTER TABLE `llx_actioncomm_resources` DISABLE KEYS */;
+INSERT INTO `llx_actioncomm_resources` VALUES
+(6,6,'user',1,'0',0,0),
+(7,7,'user',1,'0',0,0),
+(8,8,'user',1,'0',0,0),
+(9,9,'user',1,'0',0,0);
 /*!40000 ALTER TABLE `llx_actioncomm_resources` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4709,7 +4719,7 @@ CREATE TABLE `llx_boxes` (
   KEY `idx_boxes_boxid` (`box_id`),
   KEY `idx_boxes_fk_user` (`fk_user`),
   CONSTRAINT `fk_boxes_box_id` FOREIGN KEY (`box_id`) REFERENCES `llx_boxes_def` (`rowid`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4719,52 +4729,53 @@ CREATE TABLE `llx_boxes` (
 LOCK TABLES `llx_boxes` WRITE;
 /*!40000 ALTER TABLE `llx_boxes` DISABLE KEYS */;
 INSERT INTO `llx_boxes` VALUES
-(1,1,1,0,'B46',0,NULL,NULL),
-(2,1,2,0,'A33',0,NULL,NULL),
-(3,1,3,0,'B32',0,NULL,NULL),
-(4,1,4,0,'A31',0,NULL,NULL),
-(5,1,5,0,'B30',0,NULL,NULL),
-(6,1,6,0,'A29',0,NULL,NULL),
-(7,1,7,0,'B28',0,NULL,NULL),
-(8,1,13,0,'A27',0,NULL,NULL),
-(9,1,14,0,'B26',0,NULL,NULL),
-(10,1,15,0,'A25',0,NULL,NULL),
-(11,1,16,0,'B34',0,NULL,NULL),
-(12,1,17,0,'A35',0,NULL,NULL),
-(13,1,18,0,'B36',0,NULL,NULL),
-(14,1,19,0,'A45',0,NULL,NULL),
-(15,1,20,0,'B44',0,NULL,NULL),
-(16,1,21,0,'A43',0,NULL,NULL),
-(17,1,22,0,'B42',0,NULL,NULL),
-(18,1,23,0,'A41',0,NULL,NULL),
-(19,1,24,0,'B40',0,NULL,NULL),
-(20,1,25,0,'A39',0,NULL,NULL),
-(21,1,26,0,'B38',0,NULL,NULL),
-(22,1,31,0,'A37',0,NULL,NULL),
-(23,1,34,0,'B24',0,NULL,NULL),
-(24,1,35,0,'A23',0,NULL,NULL),
-(25,1,36,0,'B10',0,NULL,NULL),
-(26,1,37,0,'A09',0,NULL,NULL),
-(27,1,38,0,'B08',0,NULL,NULL),
-(28,1,39,0,'A07',0,NULL,NULL),
-(29,1,40,0,'B06',0,NULL,NULL),
-(30,1,41,0,'A05',0,NULL,NULL),
-(31,1,42,0,'B04',0,NULL,NULL),
+(1,1,1,0,'A47',0,NULL,NULL),
+(2,1,2,0,'B18',0,NULL,NULL),
+(3,1,3,0,'B40',0,NULL,NULL),
+(4,1,4,0,'A17',0,NULL,NULL),
+(5,1,5,0,'A39',0,NULL,NULL),
+(6,1,6,0,'B16',0,NULL,NULL),
+(7,1,7,0,'B38',0,NULL,NULL),
+(8,1,13,0,'A15',0,NULL,NULL),
+(9,1,14,0,'A37',0,NULL,NULL),
+(10,1,15,0,'B14',0,NULL,NULL),
+(11,1,16,0,'A41',0,NULL,NULL),
+(12,1,17,0,'A19',0,NULL,NULL),
+(13,1,18,0,'B42',0,NULL,NULL),
+(14,1,19,0,'B24',0,NULL,NULL),
+(15,1,20,0,'B46',0,NULL,NULL),
+(16,1,21,0,'A23',0,NULL,NULL),
+(17,1,22,0,'A45',0,NULL,NULL),
+(18,1,23,0,'B22',0,NULL,NULL),
+(19,1,24,0,'B44',0,NULL,NULL),
+(20,1,25,0,'A21',0,NULL,NULL),
+(21,1,26,0,'A43',0,NULL,NULL),
+(22,1,31,0,'B20',0,NULL,NULL),
+(23,1,34,0,'B36',0,NULL,NULL),
+(24,1,35,0,'A13',0,NULL,NULL),
+(25,1,36,0,'A29',0,NULL,NULL),
+(26,1,37,0,'B06',0,NULL,NULL),
+(27,1,38,0,'B28',0,NULL,NULL),
+(28,1,39,0,'A05',0,NULL,NULL),
+(29,1,40,0,'A27',0,NULL,NULL),
+(30,1,41,0,'B04',0,NULL,NULL),
+(31,1,42,0,'B26',0,NULL,NULL),
 (32,1,43,0,'A03',0,NULL,NULL),
-(33,1,44,0,'B02',0,NULL,NULL),
-(34,1,45,0,'A11',0,NULL,NULL),
-(35,1,46,0,'B12',0,NULL,NULL),
-(36,1,47,0,'A13',0,NULL,NULL),
-(37,1,48,0,'B22',0,NULL,NULL),
-(38,1,51,0,'A21',0,NULL,NULL),
-(39,1,52,0,'B20',0,NULL,NULL),
-(40,1,53,0,'A19',0,NULL,NULL),
-(41,1,54,0,'B18',0,NULL,NULL),
-(42,1,55,0,'A17',0,NULL,NULL),
-(43,1,56,0,'B16',0,NULL,NULL),
-(44,1,57,0,'A15',0,NULL,NULL),
-(45,1,58,0,'B14',0,NULL,NULL),
-(46,1,59,0,'A01',0,NULL,NULL);
+(33,1,44,0,'A25',0,NULL,NULL),
+(34,1,45,0,'A07',0,NULL,NULL),
+(35,1,46,0,'B30',0,NULL,NULL),
+(36,1,47,0,'B08',0,NULL,NULL),
+(37,1,48,0,'A35',0,NULL,NULL),
+(38,1,51,0,'B12',0,NULL,NULL),
+(39,1,52,0,'B34',0,NULL,NULL),
+(40,1,53,0,'A11',0,NULL,NULL),
+(41,1,54,0,'A33',0,NULL,NULL),
+(42,1,55,0,'B10',0,NULL,NULL),
+(43,1,56,0,'B32',0,NULL,NULL),
+(44,1,57,0,'A09',0,NULL,NULL),
+(45,1,58,0,'A31',0,NULL,NULL),
+(46,1,59,0,'B02',0,NULL,NULL),
+(47,1,60,0,'A01',0,NULL,NULL);
 /*!40000 ALTER TABLE `llx_boxes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4784,7 +4795,7 @@ CREATE TABLE `llx_boxes_def` (
   `note` varchar(130) DEFAULT NULL,
   PRIMARY KEY (`rowid`),
   UNIQUE KEY `uk_boxes_def` (`file`,`entity`,`note`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4852,7 +4863,8 @@ INSERT INTO `llx_boxes_def` VALUES
 (56,'box_task.php',1,0,'2025-11-16 14:50:50',NULL),
 (57,'box_validated_projects.php',1,0,'2025-11-16 14:50:50',NULL),
 (58,'box_funnel_of_prospection.php',1,0,'2025-11-16 14:50:50',NULL),
-(59,'box_scheduled_jobs.php',1,0,'2025-11-16 14:55:08',NULL);
+(59,'box_scheduled_jobs.php',1,0,'2025-11-16 14:55:08',NULL),
+(60,'box_bookmarks.php',1,0,'2025-11-20 14:22:36',NULL);
 /*!40000 ALTER TABLE `llx_boxes_def` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -9691,7 +9703,7 @@ INSERT INTO `llx_c_socialnetworks` VALUES
 (1,1,'500px','500px','{socialid}','fa-500px',0),
 (2,1,'dailymotion','Dailymotion','{socialid}','',0),
 (3,1,'diaspora','Diaspora','{socialid}','',0),
-(4,1,'discord','Discord','{socialid}','fa-discord',0),
+(4,1,'discord','Discord','{socialid}','fa-discord',1),
 (5,1,'facebook','Facebook','https://www.facebook.com/{socialid}','fa-facebook',1),
 (6,1,'flickr','Flickr','{socialid}','fa-flickr',0),
 (7,1,'gifycat','Gificat','{socialid}','',0),
@@ -9702,10 +9714,10 @@ INSERT INTO `llx_c_socialnetworks` VALUES
 (12,1,'mastodon','Mastodon','{socialid}','fa-mastodon',0),
 (13,1,'meetup','Meetup','{socialid}','fa-meetup',0),
 (14,1,'periscope','Periscope','{socialid}','',0),
-(15,1,'pinterest','Pinterest','{socialid}','fa-pinterest',0),
+(15,1,'pinterest','Pinterest','{socialid}','fa-pinterest',1),
 (16,1,'pixelfed','Pixelfed','{socialid}','fa-pixelfed',0),
 (17,1,'quora','Quora','{socialid}','',0),
-(18,1,'reddit','Reddit','{socialid}','fa-reddit',0),
+(18,1,'reddit','Reddit','{socialid}','fa-reddit',1),
 (19,1,'slack','Slack','{socialid}','fa-slack',0),
 (20,1,'snapchat','Snapchat','{socialid}','fa-snapchat',1),
 (21,1,'skype','Skype','https://www.skype.com/{socialid}','fa-skype',1),
@@ -9718,7 +9730,7 @@ INSERT INTO `llx_c_socialnetworks` VALUES
 (28,1,'viber','Viber','{socialid}','',0),
 (29,1,'vimeo','Vimeo','{socialid}','fa-vimeo',0),
 (30,1,'whatsapp','Whatsapp','https://web.whatsapp.com/send?phone={socialid}','fa-whatsapp',1),
-(31,1,'wikipedia','Wikipedia','{socialid}','fa-wikipedia-w',0),
+(31,1,'wikipedia','Wikipedia','{socialid}','fa-wikipedia-w',1),
 (32,1,'xing','Xing','{socialid}','fa-xing',0),
 (33,1,'youtube','Youtube','https://www.youtube.com/{socialid}','fa-youtube',1);
 /*!40000 ALTER TABLE `llx_c_socialnetworks` ENABLE KEYS */;
@@ -10372,27 +10384,27 @@ INSERT INTO `llx_c_type_fees` VALUES
 (2,'TF_TRIP','Transportation',0,NULL,1,NULL,0),
 (3,'TF_LUNCH','Lunch',0,NULL,1,NULL,0),
 (4,'EX_KME','ExpLabelKm',0,NULL,1,NULL,0),
-(5,'EX_FUE','ExpLabelFuelCV',0,NULL,0,NULL,0),
-(6,'EX_HOT','ExpLabelHotel',0,NULL,0,NULL,0),
-(7,'EX_PAR','ExpLabelParkingCV',0,NULL,0,NULL,0),
-(8,'EX_TOL','ExpLabelTollCV',0,NULL,0,NULL,0),
-(9,'EX_TAX','ExpLabelVariousTaxes',0,NULL,0,NULL,0),
+(5,'EX_FUE','ExpLabelFuelCV',0,NULL,1,NULL,0),
+(6,'EX_HOT','ExpLabelHotel',0,NULL,1,NULL,0),
+(7,'EX_PAR','ExpLabelParkingCV',0,NULL,1,NULL,0),
+(8,'EX_TOL','ExpLabelTollCV',0,NULL,1,NULL,0),
+(9,'EX_TAX','ExpLabelVariousTaxes',0,NULL,1,NULL,0),
 (10,'EX_IND','ExpLabelIndemnityTransSubscrip',0,NULL,0,NULL,0),
-(11,'EX_SUM','ExpLabelMaintenanceSupply',0,NULL,0,NULL,0),
-(12,'EX_SUO','ExpLabelOfficeSupplies',0,NULL,0,NULL,0),
-(13,'EX_CAR','ExpLabelCarRental',0,NULL,0,NULL,0),
-(14,'EX_DOC','ExpLabelDocumentation',0,NULL,0,NULL,0),
-(15,'EX_CUR','ExpLabelCustomersReceiving',0,NULL,0,NULL,0),
-(16,'EX_OTR','ExpLabelOtherReceiving',0,NULL,0,NULL,0),
-(17,'EX_POS','ExpLabelPostage',0,NULL,0,NULL,0),
-(18,'EX_CAM','ExpLabelMaintenanceRepairCV',0,NULL,0,NULL,0),
-(19,'EX_EMM','ExpLabelEmployeesMeal',0,NULL,0,NULL,0),
-(20,'EX_GUM','ExpLabelGuestsMeal',0,NULL,0,NULL,0),
+(11,'EX_SUM','ExpLabelMaintenanceSupply',0,NULL,1,NULL,0),
+(12,'EX_SUO','ExpLabelOfficeSupplies',0,NULL,1,NULL,0),
+(13,'EX_CAR','ExpLabelCarRental',0,NULL,1,NULL,0),
+(14,'EX_DOC','ExpLabelDocumentation',0,NULL,1,NULL,0),
+(15,'EX_CUR','ExpLabelCustomersReceiving',0,NULL,1,NULL,0),
+(16,'EX_OTR','ExpLabelOtherReceiving',0,NULL,1,NULL,0),
+(17,'EX_POS','ExpLabelPostage',0,NULL,1,NULL,0),
+(18,'EX_CAM','ExpLabelMaintenanceRepairCV',0,NULL,1,NULL,0),
+(19,'EX_EMM','ExpLabelEmployeesMeal',0,NULL,1,NULL,0),
+(20,'EX_GUM','ExpLabelGuestsMeal',0,NULL,1,NULL,0),
 (21,'EX_BRE','ExpLabelBreakfast',0,NULL,0,NULL,0),
-(22,'EX_FUE_VP','ExpLabelFuelPV',0,NULL,0,NULL,0),
-(23,'EX_TOL_VP','ExpLabelTollPV',0,NULL,0,NULL,0),
-(24,'EX_PAR_VP','ExpLabelParkingPV',0,NULL,0,NULL,0),
-(25,'EX_CAM_VP','ExpLabelMaintenanceRepairPV',0,NULL,0,NULL,0);
+(22,'EX_FUE_VP','ExpLabelFuelPV',0,NULL,1,NULL,0),
+(23,'EX_TOL_VP','ExpLabelTollPV',0,NULL,1,NULL,0),
+(24,'EX_PAR_VP','ExpLabelParkingPV',0,NULL,1,NULL,0),
+(25,'EX_CAM_VP','ExpLabelMaintenanceRepairPV',0,NULL,1,NULL,0);
 /*!40000 ALTER TABLE `llx_c_type_fees` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -10452,13 +10464,13 @@ CREATE TABLE `llx_c_typent` (
 LOCK TABLES `llx_c_typent` WRITE;
 /*!40000 ALTER TABLE `llx_c_typent` DISABLE KEYS */;
 INSERT INTO `llx_c_typent` VALUES
-(1,'TE_STARTUP','Start-up',NULL,0,NULL,0),
+(1,'TE_STARTUP','Start-up',NULL,1,NULL,0),
 (2,'TE_GROUP','Grand groupe',NULL,1,NULL,0),
 (3,'TE_MEDIUM','PME/PMI',NULL,1,NULL,0),
 (4,'TE_SMALL','TPE',NULL,1,NULL,0),
 (5,'TE_ADMIN','Administration',NULL,1,NULL,0),
-(6,'TE_WHOLE','Grossiste',NULL,0,NULL,0),
-(7,'TE_RETAIL','Revendeur',NULL,0,NULL,0),
+(6,'TE_WHOLE','Grossiste',NULL,1,NULL,0),
+(7,'TE_RETAIL','Revendeur',NULL,1,NULL,0),
 (8,'TE_PRIVATE','Particulier',NULL,1,NULL,0),
 (100,'TE_OTHER','Autres',NULL,1,NULL,0),
 (231,'TE_A_RI','Responsable Inscripto (typo A)',23,0,NULL,0),
@@ -10596,7 +10608,7 @@ CREATE TABLE `llx_categorie` (
   `import_key` varchar(14) DEFAULT NULL,
   PRIMARY KEY (`rowid`),
   UNIQUE KEY `uk_categorie_ref` (`entity`,`fk_parent`,`label`,`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -10605,6 +10617,23 @@ CREATE TABLE `llx_categorie` (
 
 LOCK TABLES `llx_categorie` WRITE;
 /*!40000 ALTER TABLE `llx_categorie` DISABLE KEYS */;
+INSERT INTO `llx_categorie` VALUES
+(1,1,0,'Chemicals- Solvents',NULL,0,'','',NULL,NULL,'2026-01-27 06:49:44',1,NULL,'2026-01-27 06:49:44',0,1,NULL),
+(2,1,0,'Chemicals- Chemicals',NULL,0,'','',NULL,NULL,'2026-01-27 06:50:01',1,NULL,'2026-01-27 06:50:01',0,1,NULL),
+(3,1,0,'Chemicals- Resins',NULL,0,'','',NULL,NULL,'2026-01-27 06:50:16',1,NULL,'2026-01-27 06:50:16',0,1,NULL),
+(4,1,0,'Chemicals- Additives and others',NULL,0,'','',NULL,NULL,'2026-01-27 06:51:06',1,NULL,'2026-01-27 06:51:06',0,1,NULL),
+(5,1,0,'Chemicals- Pigments and functional compounds','',0,'','',NULL,NULL,'2026-01-27 06:51:44',1,1,'2026-01-27 06:54:27',0,1,NULL),
+(6,1,0,'Chemicals- Polymers',NULL,0,'','',NULL,NULL,'2026-01-27 06:52:11',1,NULL,'2026-01-27 06:52:11',0,1,NULL),
+(7,1,0,'Chemicals- Fillers','',0,'','',NULL,NULL,'2026-01-27 06:54:41',1,1,'2026-01-27 06:54:55',0,1,NULL),
+(8,1,0,'Packaging materials',NULL,0,'','',NULL,NULL,'2026-01-27 06:55:48',1,NULL,'2026-01-27 06:55:48',0,1,NULL),
+(9,1,0,'Warehouse 11','',9,'ingress and security centre, people entry, vehicle entry details and document check','',NULL,NULL,'2026-01-27 07:08:04',1,1,'2026-01-27 07:13:18',0,1,NULL),
+(10,1,0,'warehouse 21',NULL,9,'storage area, quantitative check, document verification, quality check approval from quality control','',NULL,NULL,'2026-01-27 07:08:35',1,NULL,'2026-01-27 07:08:35',0,1,NULL),
+(11,1,0,'warehouse 41',NULL,9,'quality control, incoming materials and equipment','',NULL,NULL,'2026-01-27 07:09:12',1,NULL,'2026-01-27 07:09:12',0,1,NULL),
+(12,1,0,'warehouse 31',NULL,9,'for posts, couriers and other materials;','',NULL,NULL,'2026-01-27 07:11:18',1,NULL,'2026-01-27 07:11:18',0,1,NULL),
+(13,1,0,'warehouse 42',NULL,9,'quality control, intermediary products, finished materials and equipment','',NULL,NULL,'2026-01-27 07:11:48',1,NULL,'2026-01-27 07:11:48',0,1,NULL),
+(14,1,0,'warehouse 51',NULL,9,'manufacturing area','',NULL,NULL,'2026-01-27 07:14:05',1,NULL,'2026-01-27 07:14:05',0,1,NULL),
+(15,1,0,'warehouse 52',NULL,9,'intermediary product storage area','',NULL,NULL,'2026-01-27 07:14:39',1,NULL,'2026-01-27 07:14:39',0,1,NULL),
+(16,1,0,'warehouse 91',NULL,9,'finished goods storage','',NULL,NULL,'2026-01-27 07:15:07',1,NULL,'2026-01-27 07:15:07',0,1,NULL);
 /*!40000 ALTER TABLE `llx_categorie` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -10885,6 +10914,9 @@ CREATE TABLE `llx_categorie_product` (
 
 LOCK TABLES `llx_categorie_product` WRITE;
 /*!40000 ALTER TABLE `llx_categorie_product` DISABLE KEYS */;
+INSERT INTO `llx_categorie_product` VALUES
+(7,4,NULL),
+(7,5,NULL);
 /*!40000 ALTER TABLE `llx_categorie_product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -11081,6 +11113,8 @@ CREATE TABLE `llx_categorie_warehouse` (
 
 LOCK TABLES `llx_categorie_warehouse` WRITE;
 /*!40000 ALTER TABLE `llx_categorie_warehouse` DISABLE KEYS */;
+INSERT INTO `llx_categorie_warehouse` VALUES
+(10,1,NULL);
 /*!40000 ALTER TABLE `llx_categorie_warehouse` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -11670,7 +11704,7 @@ CREATE TABLE `llx_const` (
   `tms` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`rowid`),
   UNIQUE KEY `uk_const` (`name`,`entity`)
-) ENGINE=InnoDB AUTO_INCREMENT=926 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1078 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -11680,7 +11714,6 @@ CREATE TABLE `llx_const` (
 LOCK TABLES `llx_const` WRITE;
 /*!40000 ALTER TABLE `llx_const` DISABLE KEYS */;
 INSERT INTO `llx_const` VALUES
-(2,'MAIN_FEATURES_LEVEL',1,'0','chaine',1,'Level of features to show: -1=stable+deprecated, 0=stable only (default), 1=stable+experimental, 2=stable+experimental+development','2025-11-13 06:30:46'),
 (3,'SYSLOG_HANDLERS',0,'[\"mod_syslog_file\"]','chaine',0,'Which logger to use','2025-11-13 06:30:46'),
 (4,'SYSLOG_FILE',0,'DOL_DATA_ROOT/dolibarr.log','chaine',0,'Directory where to write log file','2025-11-13 06:30:46'),
 (5,'SYSLOG_LEVEL',0,'7','chaine',0,'Level of debug info to show','2025-11-13 06:30:46'),
@@ -11713,7 +11746,6 @@ INSERT INTO `llx_const` VALUES
 (35,'CONTRACT_ADDON_PDF_ODT_PATH',1,'DOL_DATA_ROOT/doctemplates/contracts','chaine',0,NULL,'2025-11-13 06:30:46'),
 (36,'USERGROUP_ADDON_PDF_ODT_PATH',1,'DOL_DATA_ROOT/doctemplates/usergroups','chaine',0,NULL,'2025-11-13 06:30:46'),
 (37,'USER_ADDON_PDF_ODT_PATH',1,'DOL_DATA_ROOT/doctemplates/users','chaine',0,NULL,'2025-11-13 06:30:46'),
-(38,'PRODUCT_PRICE_BASE_TYPE',1,'HT','string',0,NULL,'2025-11-13 06:30:46'),
 (39,'ADHERENT_LOGIN_NOT_REQUIRED',1,'1','string',0,NULL,'2025-11-13 06:30:46'),
 (40,'MAIN_MODULE_USER',0,'1','string',0,'{\"authorid\":0,\"ip\":\"172.18.0.1\",\"lastactivationversion\":\"dolibarr\"}','2025-11-13 06:31:04'),
 (41,'DATABASE_PWD_ENCRYPTED',1,'1','chaine',0,'','2025-11-13 06:31:04'),
@@ -11725,7 +11757,6 @@ INSERT INTO `llx_const` VALUES
 (47,'MAIN_MODULE_EXPORT',1,'1','string',0,'{\"authorid\":0,\"ip\":\"172.18.0.1\",\"lastactivationversion\":\"dolibarr\"}','2025-11-13 06:31:04'),
 (48,'MAIN_MODULE_FCKEDITOR',1,'1','string',0,'{\"authorid\":0,\"ip\":\"172.18.0.1\",\"lastactivationversion\":\"dolibarr\"}','2025-11-13 06:31:04'),
 (49,'FCKEDITOR_ENABLE_SOCIETE',1,'1','yesno',0,'WYSIWYG for the fields descriptions of elements (except products/services)','2025-11-13 06:31:04'),
-(50,'FCKEDITOR_ENABLE_DETAILS',1,'1','yesno',0,'WYSIWYG for products details lines for all entities','2025-11-13 06:31:04'),
 (51,'FCKEDITOR_ENABLE_USERSIGN',1,'1','yesno',0,'WYSIWYG for user signature','2025-11-13 06:31:04'),
 (52,'FCKEDITOR_ENABLE_MAILING',1,'1','yesno',0,'WYSIWYG for mass emailings','2025-11-13 06:31:04'),
 (53,'FCKEDITOR_ENABLE_MAIL',1,'1','yesno',0,'WYSIWYG for products details lines for all entities','2025-11-13 06:31:04'),
@@ -11905,7 +11936,6 @@ INSERT INTO `llx_const` VALUES
 (253,'MAIN_MODULE_HRM',1,'1','string',0,'{\"authorid\":\"1\",\"ip\":\"172.18.0.1\",\"lastactivationversion\":\"dolibarr\"}','2025-11-13 06:33:25'),
 (254,'MAIN_MODULE_HRM_TABS_0',1,'user:+skill_tab:Skills:hrm:1:/hrm/skill_tab.php?id=__ID__&objecttype=user','chaine',0,NULL,'2025-11-13 06:33:25'),
 (255,'MAIN_MODULE_HRM_MODELS',1,'1','chaine',0,NULL,'2025-11-13 06:33:25'),
-(258,'MAIN_LAST_PING_KO_DATE',1,'20251113134726','chaine',0,'','2025-11-13 13:47:26'),
 (280,'MAIN_INFO_SOCIETE_COUNTRY',1,'117:IN:India','chaine',0,'','2025-11-16 14:19:21'),
 (281,'MAIN_INFO_SOCIETE_STATE',1,'1506:KA:Karnataka','chaine',0,'','2025-11-16 14:19:22'),
 (282,'MAIN_INFO_SOCIETE_NOM',1,'Arven Technomers Pvt. Ltd.','chaine',0,'','2025-11-16 14:19:22'),
@@ -11977,17 +12007,13 @@ INSERT INTO `llx_const` VALUES
 (388,'MAIN_MODULE_PARTNERSHIP',1,'1','string',0,'{\"authorid\":\"1\",\"ip\":\"172.18.0.1\",\"lastactivationversion\":\"dolibarr\"}','2025-11-16 14:48:16'),
 (389,'MAIN_MODULE_PARTNERSHIP_MODELS',1,'1','chaine',0,NULL,'2025-11-16 14:48:16'),
 (393,'MAIN_MODULE_FOURNISSEUR',1,'1','string',0,'{\"authorid\":\"1\",\"ip\":\"172.18.0.1\",\"lastactivationversion\":\"dolibarr\"}','2025-11-16 14:48:19'),
-(394,'COMMANDE_SUPPLIER_ADDON_PDF',1,'cornas','chaine',0,'Nom du gestionnaire de generation des bons de commande en PDF','2025-11-16 14:48:19'),
 (395,'COMMANDE_SUPPLIER_ADDON_NUMBER',1,'mod_commande_fournisseur_muguet','chaine',0,'Nom du gestionnaire de numerotation des commandes fournisseur','2025-11-16 14:48:19'),
 (396,'INVOICE_SUPPLIER_ADDON_NUMBER',1,'mod_facture_fournisseur_cactus','chaine',0,'Nom du gestionnaire de numerotation des factures fournisseur','2025-11-16 14:48:19'),
 (397,'SUPPLIER_ORDER_ADDON_PDF_ODT_PATH',1,'DOL_DATA_ROOT/doctemplates/supplier_orders','chaine',0,NULL,'2025-11-16 14:48:19'),
 (398,'SUPPLIER_INVOICE_ADDON_PDF_ODT_PATH',1,'DOL_DATA_ROOT/doctemplates/supplier_invoices','chaine',0,NULL,'2025-11-16 14:48:19'),
 (402,'MAIN_MODULE_SUPPLIERPROPOSAL',1,'1','string',0,'{\"authorid\":\"1\",\"ip\":\"172.18.0.1\",\"lastactivationversion\":\"dolibarr\"}','2025-11-16 14:48:23'),
-(403,'SUPPLIER_PROPOSAL_ADDON_PDF',1,'aurore','chaine',0,'Name of submodule to generate PDF for supplier quotation request','2025-11-16 14:48:23'),
 (404,'SUPPLIER_PROPOSAL_ADDON',1,'mod_supplier_proposal_marbre','chaine',0,'Name of submodule to number supplier quotation request','2025-11-16 14:48:23'),
-(405,'SUPPLIER_PROPOSAL_ADDON_PDF_ODT_PATH',1,'DOL_DATA_ROOT/doctemplates/supplier_proposals','chaine',0,NULL,'2025-11-16 14:48:23'),
 (409,'MAIN_MODULE_RECEPTION',1,'1','string',0,'{\"authorid\":\"1\",\"ip\":\"172.18.0.1\",\"lastactivationversion\":\"dolibarr\"}','2025-11-16 14:48:28'),
-(410,'RECEPTION_ADDON_PDF',1,'squille','chaine',0,'Nom du gestionnaire de generation des bons receptions en PDF','2025-11-16 14:48:28'),
 (411,'RECEPTION_ADDON_NUMBER',1,'mod_reception_beryl','chaine',0,'Name for numbering manager for receptions','2025-11-16 14:48:28'),
 (412,'RECEPTION_ADDON_PDF_ODT_PATH',1,'DOL_DATA_ROOT/doctemplates/receptions','chaine',0,NULL,'2025-11-16 14:48:28'),
 (413,'MAIN_SUBMODULE_RECEPTION',1,'1','chaine',0,'Enable receptions','2025-11-16 14:48:28'),
@@ -12013,8 +12039,6 @@ INSERT INTO `llx_const` VALUES
 (469,'MAIN_MODULE_MARGIN_TABS_1',1,'thirdparty:+margin:Margins:margins:empty($user->socid) && $user->hasRight(\"margins\",\"liretous\") && ($object->client > 0):/margin/tabs/thirdpartyMargins.php?socid=__ID__','chaine',0,NULL,'2025-11-16 14:49:48'),
 (470,'MARGIN_TYPE',1,'costprice','chaine',0,'Rule for margin calculation by default','2025-11-16 14:49:48'),
 (471,'MAIN_MODULE_PRODUCT',1,'1','string',0,'{\"authorid\":\"1\",\"ip\":\"172.18.0.1\",\"lastactivationversion\":\"dolibarr\"}','2025-11-16 14:49:48'),
-(472,'PRODUCT_CODEPRODUCT_ADDON',1,'mod_codeproduct_leopard','chaine',0,'Module to control product codes','2025-11-16 14:49:48'),
-(473,'PRODUCT_PRICE_UNIQ',1,'1','chaine',0,'pricing rule by default','2025-11-16 14:49:48'),
 (477,'MAIN_MODULE_ACCOUNTING',1,'1','string',0,'{\"authorid\":\"1\",\"ip\":\"172.18.0.1\",\"lastactivationversion\":\"dolibarr\"}','2025-11-16 14:49:55'),
 (478,'MAIN_COMPANY_CODE_ALWAYS_REQUIRED',1,'1','chaine',0,'With this constants on, third party code is always required whatever is numbering module behaviour','2025-11-16 14:49:55'),
 (479,'MAIN_BANK_ACCOUNTANCY_CODE_ALWAYS_REQUIRED',1,'1','chaine',0,'With this constants on, bank account number is always required','2025-11-16 14:49:55'),
@@ -12031,7 +12055,6 @@ INSERT INTO `llx_const` VALUES
 (512,'MAIN_MODULE_VARIANTS',1,'1','string',0,'{\"authorid\":\"1\",\"ip\":\"172.18.0.1\",\"lastactivationversion\":\"dolibarr\"}','2025-11-16 14:50:33'),
 (516,'MAIN_MODULE_BOM',1,'1','string',0,'{\"authorid\":\"1\",\"ip\":\"172.18.0.1\",\"lastactivationversion\":\"dolibarr\"}','2025-11-16 14:50:38'),
 (517,'BOM_ADDON_PDF',1,'generic_bom_odt','chaine',0,'Name of PDF model of BOM','2025-11-16 14:50:38'),
-(518,'BOM_ADDON',1,'mod_bom_standard','chaine',0,'Name of numbering rules of BOM','2025-11-16 14:50:38'),
 (519,'BOM_ADDON_PDF_ODT_PATH',1,'DOL_DATA_ROOT/doctemplates/boms','chaine',0,NULL,'2025-11-16 14:50:38'),
 (523,'MAIN_MODULE_MRP',1,'1','string',0,'{\"authorid\":\"1\",\"ip\":\"172.18.0.1\",\"lastactivationversion\":\"dolibarr\"}','2025-11-16 14:50:42'),
 (524,'MRP_MO_ADDON',1,'mod_mo_standard','chaine',0,'Name of numbering rules of MO','2025-11-16 14:50:42'),
@@ -12059,13 +12082,11 @@ INSERT INTO `llx_const` VALUES
 (574,'WORKFLOW_INVOICE_CLASSIFY_BILLED_PROPAL',1,'1','chaine',0,'WORKFLOW_INVOICE_CLASSIFY_BILLED_PROPAL','2025-11-16 14:52:04'),
 (575,'WORKFLOW_ORDER_CLASSIFY_SHIPPED_SHIPPING',1,'1','chaine',0,'WORKFLOW_ORDER_CLASSIFY_SHIPPED_SHIPPING','2025-11-16 14:52:04'),
 (576,'WORKFLOW_ORDER_CLASSIFY_SHIPPED_SHIPPING_CLOSED',1,'1','chaine',0,'WORKFLOW_ORDER_CLASSIFY_SHIPPED_SHIPPING_CLOSED','2025-11-16 14:52:04'),
-(577,'WORKFLOW_INVOICE_AMOUNT_CLASSIFY_BILLED_ORDER',1,'1','chaine',0,'WORKFLOW_INVOICE_AMOUNT_CLASSIFY_BILLED_ORDER','2025-11-16 14:52:04'),
 (578,'WORKFLOW_SUM_INVOICES_AMOUNT_CLASSIFY_BILLED_ORDER',1,'1','chaine',0,'WORKFLOW_INVOICE_AMOUNT_CLASSIFY_BILLED_ORDER','2025-11-16 14:52:04'),
 (579,'WORKFLOW_ORDER_CLASSIFY_BILLED_SUPPLIER_PROPOSAL',1,'1','chaine',0,'WORKFLOW_ORDER_CLASSIFY_BILLED_SUPPLIER_PROPOSAL','2025-11-16 14:52:04'),
 (580,'WORKFLOW_ORDER_CLASSIFY_RECEIVED_RECEPTION',1,'1','chaine',0,'WORKFLOW_ORDER_CLASSIFY_RECEIVED_RECEPTION','2025-11-16 14:52:04'),
 (581,'WORKFLOW_ORDER_CLASSIFY_RECEIVED_RECEPTION_CLOSED',1,'1','chaine',0,'WORKFLOW_ORDER_CLASSIFY_RECEIVED_RECEPTION_CLOSED','2025-11-16 14:52:04'),
 (582,'WORKFLOW_INVOICE_AMOUNT_CLASSIFY_BILLED_SUPPLIER_ORDER',1,'1','chaine',0,'WORKFLOW_INVOICE_AMOUNT_CLASSIFY_BILLED_SUPPLIER_ORDER','2025-11-16 14:52:04'),
-(583,'WORKFLOW_TICKET_LINK_CONTRACT',1,'0','chaine',0,'Automatically link a ticket to available contracts','2025-11-16 14:52:04'),
 (584,'WORKFLOW_TICKET_USE_PARENT_COMPANY_CONTRACTS',1,'0','chaine',0,'Search among parent companies contracts when automatically linking a ticket to available contracts','2025-11-16 14:52:04'),
 (585,'WORKFLOW_TICKET_CREATE_INTERVENTION',1,'0','chaine',0,'WORKFLOW_TICKET_CREATE_INTERVENTION','2025-11-16 14:52:04'),
 (589,'MAIN_MODULE_WEBPORTAL',1,'1','string',0,'{\"authorid\":\"1\",\"ip\":\"172.18.0.1\",\"lastactivationversion\":\"dolibarr\"}','2025-11-16 14:54:10'),
@@ -12109,10 +12130,6 @@ INSERT INTO `llx_const` VALUES
 (685,'DATAPOLICY_CONTACT_FOURNISSEUR',1,'','chaine',0,'NUMBER_MONTH_BEFORE_DELETION','2025-11-17 12:36:05'),
 (686,'DATAPOLICY_ADHERENT',1,'','chaine',0,'NUMBER_MONTH_BEFORE_DELETION','2025-11-17 12:36:05'),
 (687,'DATAPOLICY_RECRUITMENT_CANDIDATURE',1,'','chaine',0,'NUMBER_MONTH_BEFORE_DELETION','2025-11-17 12:36:05'),
-(688,'MAIN_IHM_PARAMS_REV',1,'64','chaine',0,'','2025-11-17 12:36:05'),
-(689,'MAIN_MODULE_SETUP_ON_LIST_BY_DEFAULT',1,'common','chaine',0,'','2025-11-17 12:36:05'),
-(692,'PRODUIT_DEFAULT_BARCODE_TYPE',1,'8','chaine',0,'','2025-11-17 12:39:29'),
-(693,'GENBARCODE_BARCODETYPE_THIRDPARTY',1,'8','chaine',0,'','2025-11-17 12:39:29'),
 (694,'BANK_DISABLE_DIRECT_INPUT',1,'1','chaine',0,'','2025-11-17 13:02:01'),
 (695,'ACCOUNTING_MANAGE_ZERO',1,'1','chaine',0,'','2025-11-17 13:02:24'),
 (696,'ACCOUNTING_DEFAULT_PERIOD_ON_TRANSFER',1,'1','chaine',0,'','2025-11-17 13:05:14'),
@@ -12130,8 +12147,6 @@ INSERT INTO `llx_const` VALUES
 (724,'USER_MAIL_REQUIRED',1,'1','chaine',0,'','2025-11-17 14:25:54'),
 (725,'MAIN_NON_WORKING_DAYS_INCLUDE_SATURDAY',1,'0','chaine',0,'','2025-11-17 14:27:24'),
 (726,'HRMTEST_EVALUATION_ADDON',1,'mod_evaluation_standard','chaine',0,'','2025-11-17 14:43:54'),
-(727,'SOCIETE_CODECOMPTA_ADDON',1,'mod_codecompta_aquarium','chaine',0,'','2025-11-17 14:44:49'),
-(728,'PROPOSAL_ALLOW_EXTERNAL_DOWNLOAD',1,'1','chaine',0,'','2025-11-17 14:48:37'),
 (729,'PROPALE_VALIDITY_DURATION',1,'30','chaine',0,'','2025-11-17 14:48:47'),
 (730,'PDF_PROPAL_SHOW_PRICE_INCL_TAX',1,'1','chaine',0,'','2025-11-17 14:48:56'),
 (731,'MAIN_GENERATE_PROPOSALS_WITH_PICTURE',1,'1','chaine',0,'','2025-11-17 14:49:06'),
@@ -12234,7 +12249,78 @@ INSERT INTO `llx_const` VALUES
 (922,'ACCOUNTING_EXPORT_FORMAT',1,'csv','chaine',0,'','2025-11-18 20:24:10'),
 (923,'ACCOUNTING_EXPORT_SEPARATORCSV',1,',','chaine',0,'','2025-11-18 20:24:10'),
 (924,'ACCOUNTING_EXPORT_ENDLINE',1,'1','chaine',0,'','2025-11-18 20:24:10'),
-(925,'ACCOUNTING_EXPORT_DATE',1,'%Y-%m-%d','chaine',0,'','2025-11-18 20:24:10');
+(925,'ACCOUNTING_EXPORT_DATE',1,'%Y-%m-%d','chaine',0,'','2025-11-18 20:24:10'),
+(945,'PRODUCT_CODEPRODUCT_ADDON',1,'mod_codeproduct_elephant','chaine',0,'','2025-11-20 05:19:42'),
+(951,'PRODUCT_SPECIAL_',1,'generic_product_odt','chaine',0,'','2025-11-20 05:21:01'),
+(952,'PRODUIT_FOURN_TEXTS',1,'1','chaine',0,'','2025-11-20 05:22:55'),
+(983,'PRODUIT_LIMIT_SIZE',1,'0','chaine',0,'','2025-11-20 05:25:46'),
+(984,'PRODUCT_PRICE_UNIQ',1,'0','chaine',0,'','2025-11-20 05:25:46'),
+(985,'PRODUIT_MULTIPRICES',1,'0','chaine',0,'','2025-11-20 05:25:46'),
+(986,'PRODUIT_CUSTOMER_PRICES',1,'1','chaine',0,'','2025-11-20 05:25:46'),
+(987,'PRODUIT_CUSTOMER_PRICES_AND_MULTIPRICES',1,'0','chaine',0,'','2025-11-20 05:25:46'),
+(988,'PRODUCT_PRICE_BASE_TYPE',1,'HT','chaine',0,'','2025-11-20 05:25:46'),
+(989,'PRODUIT_DESC_IN_FORM',1,'0','chaine',0,'','2025-11-20 05:25:46'),
+(990,'PRODUIT_TEXTS_IN_THIRDPARTY_LANGUAGE',1,'0','chaine',0,'','2025-11-20 05:25:46'),
+(991,'PRODUIT_USE_SEARCH_TO_SELECT',1,'0','chaine',0,'','2025-11-20 05:25:46'),
+(992,'PRODUIT_AUTOFILL_DESC',1,'0','chaine',0,'','2025-11-20 05:25:46'),
+(993,'PRODUCT_ELEPHANT_MASK_PRODUCT',1,'060{000000}','chaine',0,'','2025-11-20 12:49:34'),
+(994,'PRODUCT_ELEPHANT_MASK_SERVICE',1,'080{000000}','chaine',0,'','2025-11-20 12:49:34'),
+(996,'STOCK_CALCULATE_ON_SHIPMENT_CLOSE',1,'1','chaine',0,'','2025-11-20 12:53:07'),
+(997,'STOCK_CALCULATE_ON_RECEPTION',1,'1','chaine',0,'','2025-11-20 12:53:48'),
+(998,'STOCK_SUPPORTS_SERVICES',1,'1','chaine',0,'','2025-11-20 12:56:19'),
+(1002,'PRODUIT_ATTRIBUTES_HIDECHILD',1,'0','chaine',0,'','2025-11-20 12:59:31'),
+(1003,'PRODUIT_ATTRIBUTES_SEPARATOR',1,'--','chaine',0,'','2025-11-20 12:59:31'),
+(1004,'VARIANT_ALLOW_STOCK_MOVEMENT_ON_VARIANT_PARENT',1,'1','chaine',0,'','2025-11-20 12:59:31'),
+(1005,'BOM_ADDON',1,'mod_bom_advanced','chaine',0,'','2025-11-20 14:00:22'),
+(1008,'BOM_ADVANCED_MASK',1,'20{0000000000}','chaine',0,'','2025-11-20 14:02:59'),
+(1009,'MRP_MO_ADDON_PDF',1,'vinci','chaine',0,'','2025-11-20 14:03:51'),
+(1013,'AGENDA_REMINDER_BROWSER',1,'1','chaine',0,'','2025-11-20 14:10:06'),
+(1014,'AGENDA_REMINDER_EMAIL',1,'1','chaine',0,'','2025-11-20 14:10:09'),
+(1015,'AGENDA_REMINDER_SMS',1,'1','chaine',0,'','2025-11-20 14:10:12'),
+(1016,'AGENDA_DEFAULT_REMINDER_OFFSET',1,'30','chaine',0,'','2025-11-20 14:10:30'),
+(1017,'AGENDA_DEFAULT_REMINDER_OFFSET_UNIT',1,'i','chaine',0,'','2025-11-20 14:10:30'),
+(1018,'AGENDA_DEFAULT_REMINDER_EMAIL_MODEL',1,'0','chaine',0,'','2025-11-20 14:10:30'),
+(1019,'AGENDA_DEFAULT_REMINDER_EVENT_TYPES',1,'\"\"','chaine',0,'','2025-11-20 14:10:30'),
+(1022,'FCKEDITOR_ENABLE_DETAILS',1,'0','chaine',0,'','2025-11-20 14:14:51'),
+(1023,'FCKEDITOR_TEST',1,'Test','chaine',0,'','2025-11-20 14:19:18'),
+(1024,'SUBTOTAL_TITLE_PROPAL',1,'1','chaine',0,'','2025-11-20 14:21:40'),
+(1025,'SUBTOTAL_PROPAL',1,'1','chaine',0,'','2025-11-20 14:21:44'),
+(1026,'SUBTOTAL_TITLE_COMMANDE',1,'1','chaine',0,'','2025-11-20 14:21:47'),
+(1027,'SUBTOTAL_COMMANDE',1,'1','chaine',0,'','2025-11-20 14:21:53'),
+(1029,'SUBTOTAL_TITLE_FICHINTER',1,'0','chaine',0,'','2025-11-20 14:21:58'),
+(1030,'SUBTOTAL_TITLE_FACTURE',1,'1','chaine',0,'','2025-11-20 14:22:00'),
+(1031,'SUBTOTAL_FACTURE',1,'1','chaine',0,'','2025-11-20 14:22:03'),
+(1032,'SUBTOTAL_TITLE_FACTUREREC',1,'1','chaine',0,'','2025-11-20 14:22:05'),
+(1033,'SUBTOTAL_FACTUREREC',1,'1','chaine',0,'','2025-11-20 14:22:09'),
+(1035,'MAIN_MODULE_BOOKMARK',1,'1','string',0,'{\"authorid\":\"1\",\"ip\":\"172.18.0.1\",\"lastactivationversion\":\"dolibarr\"}','2025-11-20 14:22:36'),
+(1039,'WORKFLOW_INVOICE_AMOUNT_CLASSIFY_BILLED_ORDER',1,'1','chaine',0,'','2025-11-20 14:28:27'),
+(1040,'WORKFLOW_TICKET_LINK_CONTRACT',1,'1','chaine',0,'','2025-11-20 14:32:46'),
+(1041,'MAIN_IHM_PARAMS_REV',1,'66','chaine',0,'','2025-11-20 14:32:46'),
+(1042,'WORKFLOW_RECEPTION_CLASSIFY_BILLED_INVOICE',1,'1','chaine',0,'','2025-11-20 14:32:51'),
+(1043,'WORKFLOW_SHIPPING_CLASSIFY_BILLED_INVOICE',1,'1','chaine',0,'','2025-11-20 14:32:55'),
+(1048,'DEBUGBAR_LOGS_LINES_NUMBER',0,'250','chaine',0,'','2025-11-20 15:42:48'),
+(1049,'DEBUGBAR_USE_LOG_FILE',0,'1','chaine',0,'','2025-11-20 15:42:48'),
+(1051,'PRODUIT_DEFAULT_BARCODE_TYPE',1,'8','chaine',0,'','2025-11-20 15:58:56'),
+(1052,'GENBARCODE_BARCODETYPE_THIRDPARTY',1,'8','chaine',0,'','2025-11-20 15:58:56'),
+(1053,'BARCODE_PRODUCT_ADDON_NUM',1,'mod_barcode_product_standard','chaine',0,'','2025-11-20 16:30:36'),
+(1055,'BARCODE_STANDARD_PRODUCT_MASK',1,'05{0000000000}','chaine',0,'','2025-11-20 16:35:59'),
+(1056,'BARCODE_THIRDPARTY_ADDON_NUM',1,'mod_barcode_thirdparty_standard','chaine',0,'','2025-11-20 16:36:03'),
+(1057,'BARCODE_STANDARD_THIRDPARTY_MASK',1,'02{0000000000}','chaine',0,'','2025-11-20 16:36:14'),
+(1059,'MAIN_LAST_PING_KO_DATE',1,'20260114091529','chaine',0,'','2026-01-14 09:15:29'),
+(1060,'MAIN_MODULE_SETUP_ON_LIST_BY_DEFAULT',1,'common','chaine',0,'','2026-01-26 13:50:29'),
+(1061,'SOCIETE_IDPROF1_UNIQUE',1,'1','chaine',0,'','2026-01-26 13:57:02'),
+(1062,'SOCIETE_IDPROF2_UNIQUE',1,'1','chaine',0,'','2026-01-26 13:57:06'),
+(1063,'SOCIETE_IDPROF3_UNIQUE',1,'1','chaine',0,'','2026-01-26 13:57:09'),
+(1064,'SOCIETE_IDPROF4_UNIQUE',1,'1','chaine',0,'','2026-01-26 13:57:42'),
+(1065,'SOCIETE_IDPROF5_UNIQUE',1,'1','chaine',0,'','2026-01-26 13:57:44'),
+(1066,'SOCIETE_IDPROF6_UNIQUE',1,'1','chaine',0,'','2026-01-26 13:57:45'),
+(1067,'SOCIETE_CODECOMPTA_ADDON',1,'mod_codecompta_digitaria','chaine',0,'','2026-01-26 14:00:29'),
+(1068,'COMMANDE_SUPPLIER_ADDON_PDF',1,'generic_supplier_order_odt','chaine',0,'','2026-01-26 14:03:00'),
+(1069,'SUPPLIER_PROPOSAL_ADDON_PDF',1,'generic_supplier_proposal_odt','chaine',0,'','2026-01-26 14:03:42'),
+(1070,'RECEPTION_ADDON_PDF',1,'generic_reception_odt','chaine',0,'','2026-01-26 14:04:10'),
+(1073,'PROPOSAL_ALLOW_EXTERNAL_DOWNLOAD',1,'0','chaine',0,'','2026-01-26 14:16:01'),
+(1074,'SUPPLIER_PROPOSAL_ADDON_PDF_ODT_PATH',1,'DOL_DATA_ROOT/doctemplates/supplier_proposals','chaine',0,'','2026-01-26 14:16:53'),
+(1077,'MAIN_FEATURES_LEVEL',1,'2','chaine',1,'Level of features to show: -00','2026-01-26 14:53:15');
 /*!40000 ALTER TABLE `llx_const` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -12527,7 +12613,7 @@ CREATE TABLE `llx_default_values` (
   `value` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`rowid`),
   UNIQUE KEY `uk_default_values` (`type`,`entity`,`user_id`,`page`,`param`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -12536,6 +12622,8 @@ CREATE TABLE `llx_default_values` (
 
 LOCK TABLES `llx_default_values` WRITE;
 /*!40000 ALTER TABLE `llx_default_values` DISABLE KEYS */;
+INSERT INTO `llx_default_values` VALUES
+(1,1,'createform',0,'comm/action/card.php','complete','na');
 /*!40000 ALTER TABLE `llx_default_values` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -12693,7 +12781,7 @@ CREATE TABLE `llx_document_model` (
   `description` text DEFAULT NULL,
   PRIMARY KEY (`rowid`),
   UNIQUE KEY `uk_document_model` (`nom`,`type`,`entity`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -12719,7 +12807,6 @@ INSERT INTO `llx_document_model` VALUES
 (15,'html_cerfafr',1,'donation',NULL,'2025-11-16 14:48:56',NULL),
 (16,'standard_stock',1,'stock',NULL,'2025-11-16 14:50:19',NULL),
 (17,'standard_movement_stock',1,'mouvement',NULL,'2025-11-16 14:50:19',NULL),
-(18,'vinci',1,'mrp',NULL,'2025-11-16 14:50:42',NULL),
 (19,'',1,'task',NULL,'2025-11-16 14:50:50',NULL),
 (20,'beluga',1,'project',NULL,'2025-11-16 14:50:50',NULL),
 (21,'baleine',1,'project',NULL,'2025-11-16 14:50:50',NULL),
@@ -12732,10 +12819,17 @@ INSERT INTO `llx_document_model` VALUES
 (29,'generic_order_odt',1,'order','ODT templates','2025-11-17 15:03:47','COMMANDE_ADDON_PDF_ODT_PATH'),
 (30,'generic_shipment_odt',1,'shipping','ODT templates','2025-11-17 17:11:50','EXPEDITION_ADDON_PDF_ODT_PATH'),
 (31,'generic_contract_odt',1,'contract','ODT templates','2025-11-17 17:15:48','CONTRACT_ADDON_PDF_ODT_PATH'),
-(32,'generic_supplier_order_odt',1,'order_supplier','ODT templates','2025-11-17 17:21:35','SUPPLIER_ORDER_ADDON_PDF_ODT_PATH'),
-(33,'generic_supplier_proposal_odt',1,'supplier_proposal','ODT templates','2025-11-17 17:24:43','SUPPLIER_PROPOSAL_ADDON_PDF_ODT_PATH'),
-(34,'generic_reception_odt',1,'reception','ODT templates','2025-11-17 17:26:30','RECEPTION_ADDON_PDF_ODT_PATH'),
-(35,'generic_invoice_odt',1,'invoice','ODT/ODS templates','2025-11-17 17:28:29','FACTURE_ADDON_PDF_ODT_PATH');
+(35,'generic_invoice_odt',1,'invoice','ODT/ODS templates','2025-11-17 17:28:29','FACTURE_ADDON_PDF_ODT_PATH'),
+(36,'standard',1,'product','standard','2025-11-20 05:20:57',NULL),
+(37,'generic_product_odt',1,'product','ODT templates','2025-11-20 05:21:01','PRODUCT_ADDON_PDF_ODT_PATH'),
+(38,'generic_stock_odt',1,'stock','ODT templates','2025-11-20 12:55:32','STOCK_ADDON_PDF_ODT_PATH'),
+(39,'generic_mo_odt',1,'mrp','ODT templates','2025-11-20 14:03:38','MRP_MO_ADDON_PDF_ODT_PATH'),
+(40,'vinci',1,'mrp','vinci','2025-11-20 14:03:51',NULL),
+(41,'generic_project_odt',1,'project','ODT templates','2025-11-20 14:04:58','PROJECT_ADDON_PDF_ODT_PATH'),
+(42,'generic_task_odt',1,'project_task','ODT templates','2025-11-20 14:05:04','PROJECT_TASK_ADDON_PDF_ODT_PATH'),
+(43,'generic_supplier_order_odt',1,'order_supplier','ODT templates','2026-01-26 14:03:00','SUPPLIER_ORDER_ADDON_PDF_ODT_PATH'),
+(44,'generic_supplier_proposal_odt',1,'supplier_proposal','ODT templates','2026-01-26 14:03:42','SUPPLIER_PROPOSAL_ADDON_PDF_ODT_PATH'),
+(45,'generic_reception_odt',1,'reception','ODT templates','2026-01-26 14:04:10','RECEPTION_ADDON_PDF_ODT_PATH');
 /*!40000 ALTER TABLE `llx_document_model` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -12930,7 +13024,7 @@ CREATE TABLE `llx_ecm_files` (
   UNIQUE KEY `uk_ecm_files` (`filepath`,`filename`,`entity`),
   KEY `idx_ecm_files_label` (`label`),
   KEY `idx_ecm_files_src_object_type_id` (`src_object_type`,`src_object_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -12939,6 +13033,9 @@ CREATE TABLE `llx_ecm_files` (
 
 LOCK TABLES `llx_ecm_files` WRITE;
 /*!40000 ALTER TABLE `llx_ecm_files` DISABLE KEYS */;
+INSERT INTO `llx_ecm_files` VALUES
+(1,'384ef2c86b734c35cd6a5f97b1a6ef04','9df1d59056edaccc0e4c6fd39412a847',NULL,NULL,1,'stock/Store 001','Store 001.pdf','entrepot',1,NULL,'','','',NULL,NULL,1,'generated',NULL,'2026-01-27 07:47:12','2026-01-27 07:47:12',1,NULL,NULL,NULL,NULL),
+(2,'c4e711cf0d5f2d317a076bacf8d9b169','58262500fca8cbad72106e525a9a3358',NULL,NULL,1,'produit/Store 001','Store 001_warehouse.odt','entrepot',1,NULL,'','','',NULL,NULL,1,'generated',NULL,'2026-01-27 07:49:18','2026-01-27 07:49:18',1,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `llx_ecm_files` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -13289,7 +13386,7 @@ CREATE TABLE `llx_entrepot` (
   `fk_parent` int(11) DEFAULT 0,
   PRIMARY KEY (`rowid`),
   UNIQUE KEY `uk_entrepot_label` (`ref`,`entity`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -13298,6 +13395,8 @@ CREATE TABLE `llx_entrepot` (
 
 LOCK TABLES `llx_entrepot` WRITE;
 /*!40000 ALTER TABLE `llx_entrepot` DISABLE KEYS */;
+INSERT INTO `llx_entrepot` VALUES
+(1,'Store 001','2026-01-27 07:18:57','2026-01-27 07:49:18',1,NULL,'','','Honaga','591156','Belagavi',0,117,'','','',0,0,1,0,'generic_stock_odt:/var/www/documents/doctemplates/stocks/template_warehouse.odt',NULL,NULL);
 /*!40000 ALTER TABLE `llx_entrepot` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -17475,7 +17574,7 @@ CREATE TABLE `llx_product` (
   CONSTRAINT `fk_product_finished` FOREIGN KEY (`finished`) REFERENCES `llx_c_product_nature` (`code`),
   CONSTRAINT `fk_product_fk_country` FOREIGN KEY (`fk_country`) REFERENCES `llx_c_country` (`rowid`),
   CONSTRAINT `fk_product_fk_unit` FOREIGN KEY (`fk_unit`) REFERENCES `llx_c_units` (`rowid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -17484,6 +17583,12 @@ CREATE TABLE `llx_product` (
 
 LOCK TABLES `llx_product` WRITE;
 /*!40000 ALTER TABLE `llx_product` DISABLE KEYS */;
+INSERT INTO `llx_product` VALUES
+(4,'060000001',1,NULL,'2026-01-27 07:21:04','2026-01-27 07:23:33',0,'050000000001','TALC',NULL,'','',117,NULL,10.00000000,12.80000000,9.00000000,11.52000000,'HT',NULL,NULL,'I-28',28.0000,0,0.0000,'0',0.0000,'0',1,1,0,1,2,0,'',0,'',500,NULL,'050000000001',8,'4000','','4101','5001','','5003',NULL,NULL,NULL,1,NULL,NULL,-3,NULL,-3,NULL,-3,NULL,-6,NULL,-9,1,NULL,0.00000000,NULL,NULL,1,0,NULL,'',NULL,NULL,NULL,0,NULL,NULL,NULL,2000,NULL,0,NULL,0,NULL,NULL),
+(5,'060000002',1,NULL,'2026-01-27 07:46:22','2026-01-27 07:46:22',0,'050000000002','',NULL,'','',117,NULL,11.00000000,14.08000000,10.00000000,12.80000000,'HT',NULL,NULL,'I-28',28.0000,0,0.0000,'0',0.0000,'0',1,1,0,1,2,0,'',0,'',500,NULL,'050000000002',8,'4000','','4101','5001','','5003',NULL,NULL,NULL,1,NULL,NULL,-3,NULL,-3,NULL,-3,NULL,-6,NULL,-9,1,NULL,0.00000000,NULL,NULL,1,NULL,NULL,'',NULL,NULL,NULL,0,NULL,NULL,NULL,2000,NULL,0,NULL,0,NULL,NULL),
+(9,'60000001',1,NULL,NULL,'2026-01-27 11:49:12',0,'50000000001','TALC',NULL,NULL,NULL,NULL,NULL,0.00000000,0.00000000,NULL,NULL,'HT',NULL,NULL,NULL,28.0000,0,0.0000,'0',0.0000,'0',1,NULL,0,1,2,0,NULL,0,NULL,500,NULL,'50000000001',NULL,'4000',NULL,'4101','5001',NULL,'5003',NULL,NULL,NULL,1,3,NULL,0,NULL,0,NULL,0,NULL,0,NULL,0,1,NULL,0.00000000,NULL,NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,0,'20260127114912',NULL,NULL,2000,NULL,0,NULL,0,NULL,NULL),
+(10,'60000002',1,NULL,NULL,'2026-01-27 11:49:12',0,'50000000002','CaCO3',NULL,NULL,NULL,NULL,NULL,0.00000000,0.00000000,NULL,NULL,'HT',NULL,NULL,NULL,28.0000,0,0.0000,'0',0.0000,'0',1,NULL,0,1,2,0,NULL,0,NULL,500,NULL,'50000000002',NULL,'4000',NULL,'4101','5001',NULL,'5003',NULL,NULL,NULL,1,3,NULL,0,NULL,0,NULL,0,NULL,0,NULL,0,1,NULL,0.00000000,NULL,NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,0,'20260127114912',NULL,NULL,2000,NULL,0,NULL,0,NULL,NULL),
+(11,'60000003',1,NULL,NULL,'2026-01-27 11:49:12',0,'50000000003','BaSO4',NULL,NULL,NULL,NULL,NULL,0.00000000,0.00000000,NULL,NULL,'HT',NULL,NULL,NULL,28.0000,0,0.0000,'0',0.0000,'0',1,NULL,0,1,2,0,NULL,0,NULL,500,NULL,'50000000003',NULL,'4000',NULL,'4101','5001',NULL,'5003',NULL,NULL,NULL,1,3,NULL,0,NULL,0,NULL,0,NULL,0,NULL,0,1,NULL,0.00000000,NULL,NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,0,'20260127114912',NULL,NULL,2000,NULL,0,NULL,0,NULL,NULL);
 /*!40000 ALTER TABLE `llx_product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -18038,7 +18143,7 @@ CREATE TABLE `llx_product_lang` (
   PRIMARY KEY (`rowid`),
   UNIQUE KEY `uk_product_lang` (`fk_product`,`lang`),
   CONSTRAINT `fk_product_lang_fk_product` FOREIGN KEY (`fk_product`) REFERENCES `llx_product` (`rowid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -18047,6 +18152,9 @@ CREATE TABLE `llx_product_lang` (
 
 LOCK TABLES `llx_product_lang` WRITE;
 /*!40000 ALTER TABLE `llx_product_lang` DISABLE KEYS */;
+INSERT INTO `llx_product_lang` VALUES
+(4,4,'en_IN','050000000001','TALC',NULL,NULL),
+(5,5,'en_IN','050000000002','',NULL,NULL);
 /*!40000 ALTER TABLE `llx_product_lang` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -18161,7 +18269,7 @@ CREATE TABLE `llx_product_price` (
   KEY `idx_product_price_fk_user_author` (`fk_user_author`),
   KEY `idx_product_price_fk_product` (`fk_product`),
   CONSTRAINT `fk_product_price_user_author` FOREIGN KEY (`fk_product`) REFERENCES `llx_product` (`rowid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -18170,6 +18278,9 @@ CREATE TABLE `llx_product_price` (
 
 LOCK TABLES `llx_product_price` WRITE;
 /*!40000 ALTER TABLE `llx_product_price` DISABLE KEYS */;
+INSERT INTO `llx_product_price` VALUES
+(4,1,'2026-01-27 07:21:04',4,'2026-01-27 07:21:04',1,10.00000000,12.80000000,9.00000000,11.52000000,'HT','I-28',28.0000,0,0.0000,'0',0.0000,'0',1,NULL,0,0,NULL,NULL,NULL,NULL,1.00000000,NULL,NULL),
+(5,1,'2026-01-27 07:46:22',5,'2026-01-27 07:46:22',1,11.00000000,14.08000000,10.00000000,12.80000000,'HT','I-28',28.0000,0,0.0000,'0',0.0000,'0',1,NULL,0,0,NULL,NULL,NULL,NULL,1.00000000,NULL,NULL);
 /*!40000 ALTER TABLE `llx_product_price` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -19159,6 +19270,9 @@ INSERT INTO `llx_rights_def` VALUES
 (301,1,'Generate PDF sheets of barcodes','barcode','',50,'technic',0,'read','','r',0,'1'),
 (304,1,'Read barcodes','barcode','',50,'technic',0,'lire_advance','','r',0,'1'),
 (305,1,'Create/modify barcodes','barcode','',50,'technic',0,'creer_advance','','w',0,'1'),
+(331,1,'Lire les bookmarks','bookmark','',50,'technic',0,'lire','','r',0,'1'),
+(332,1,'Creer/modifier les bookmarks','bookmark','',50,'technic',0,'creer','','r',0,'1'),
+(333,1,'Supprimer les bookmarks','bookmark','',50,'technic',0,'supprimer','','r',0,'1'),
 (341,1,'Read its own permissions','user','',5,'hr',0,'self_advance','readperms','w',0,'1'),
 (342,1,'Create/modify of its own user','user','',5,'hr',0,'self','creer','w',0,'1'),
 (343,1,'Modify its own password','user','',5,'hr',0,'self','password','w',0,'1'),
@@ -20523,7 +20637,7 @@ CREATE TABLE `llx_user` (
 LOCK TABLES `llx_user` WRITE;
 /*!40000 ALTER TABLE `llx_user` DISABLE KEYS */;
 INSERT INTO `llx_user` VALUES
-(1,0,'',NULL,1,1,NULL,'2025-11-13 06:31:04','2025-11-13 06:31:04',0,NULL,'dolibarr',NULL,NULL,'$2y$10$hc9nl7duHk0TIiGePa6urudWkq9H55WMQQn7KxOJznTxaRa0him2y',NULL,NULL,'','','SuperAdmin','','','','',NULL,NULL,NULL,NULL,'','','','','','','',NULL,'','null',NULL,NULL,NULL,NULL,NULL,NULL,'',NULL,NULL,NULL,'','',NULL,NULL,'2025-11-19 13:03:19','2025-11-19 12:42:10','2025-11-13 06:31:04',NULL,NULL,'2025-11-13 06:30:59','223.186.193.136','223.186.193.136','',NULL,1,NULL,NULL,'',NULL,0,'','',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+(1,0,'',NULL,1,1,NULL,'2025-11-13 06:31:04','2025-11-13 06:31:04',0,NULL,'dolibarr',NULL,NULL,'$2y$10$hc9nl7duHk0TIiGePa6urudWkq9H55WMQQn7KxOJznTxaRa0him2y',NULL,NULL,'','','SuperAdmin','','','','',NULL,NULL,NULL,NULL,'','','','','','','',NULL,'','null',NULL,NULL,NULL,NULL,NULL,NULL,'',NULL,NULL,NULL,'','',NULL,NULL,'2026-01-27 11:31:11','2026-01-27 07:43:45','2025-11-13 06:31:04',NULL,NULL,'2025-11-13 06:30:59','106.192.238.247','106.192.226.247','',NULL,1,NULL,NULL,'',NULL,0,'','',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `llx_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -20727,7 +20841,7 @@ CREATE TABLE `llx_user_rights` (
   UNIQUE KEY `uk_user_rights` (`entity`,`fk_user`,`fk_id`),
   KEY `fk_user_rights_fk_user_user` (`fk_user`),
   CONSTRAINT `fk_user_rights_fk_user_user` FOREIGN KEY (`fk_user`) REFERENCES `llx_user` (`rowid`)
-) ENGINE=InnoDB AUTO_INCREMENT=388 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=393 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -20829,6 +20943,9 @@ INSERT INTO `llx_user_rights` VALUES
 (375,1,1,301),
 (374,1,1,304),
 (376,1,1,305),
+(391,1,1,331),
+(390,1,1,332),
+(392,1,1,333),
 (386,1,1,431),
 (237,1,1,511),
 (230,1,1,512),
@@ -21230,4 +21347,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-19 13:09:11
+-- Dump completed on 2026-01-27 12:34:56
